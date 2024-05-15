@@ -13,9 +13,9 @@ function App() {
 
   return (
     <Routes>
-      <Route path='/auth'  element={<AuthNavigation />}>
+      <Route path='/'  element={<AuthNavigation />}>
         <Route index element={<Login />} />
-        <Route path='/auth/signup' element={<Signup />} />
+        <Route path='/signup' element={<Signup />} />
       </Route>
       <Route path='/app' element={<Navigation />}>
         <Route index element={<Profile />} />

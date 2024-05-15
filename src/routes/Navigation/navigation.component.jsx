@@ -29,7 +29,7 @@ const Navigation = () => {
               <FontAwesomeIcon icon={faChevronDown} className='nav-arrow-icon' />
             </div>) : (
               <div className='nav-action-item'>
-              <span><Link to={'/auth'} className={'nav-action-link'}>Log Out</Link></span>
+              <span><Link to={'/'} className={'nav-action-link'}>Log Out</Link></span>
               <FontAwesomeIcon icon={faChevronDown} className='nav-arrow-icon' />
             </div>
             )

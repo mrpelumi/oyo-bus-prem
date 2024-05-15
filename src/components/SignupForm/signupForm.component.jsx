@@ -12,7 +12,7 @@ const SignupForm = () =>{
 
   const onSubmitHandler = (data) => {
     console.log(data);
-    navigate('/auth')
+    navigate('/')
   }
 
   const emailInput = {...register("email", {

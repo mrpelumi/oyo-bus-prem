@@ -14,7 +14,7 @@ const Signup = () => {
         <div className='form-extra-container'>
           <div className='login-option'>
             <span>Already have an account?</span>
-            <span><Link to={"/auth"} className={'login-link'}>Login</Link></span>
+            <span><Link to={"/"} className={'login-link'}>Login</Link></span>
           </div>
           </div>
       </div>
