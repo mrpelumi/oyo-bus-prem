@@ -1,0 +1,50 @@
+@use '../../variables' as v;
+
+.taxapp-form{
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  padding: 1rem;
+  width: 70%;
+}
+
+.taxapp-main-area{
+  display: flex;
+  flex-direction: column;
+  background-color: #fff;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+  border-radius: v.$main-border-radius;
+
+  hr{
+    width: 95%;
+    margin: auto;
+    background-color: v.$greeting-color;
+  }
+
+  .input-section{
+    box-shadow: none;
+  }
+}
+.taxapp-headers{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  padding: 1rem 1rem 0 1rem;
+
+  .taxapp-item{
+    font-size: 1.1rem;
+    text-decoration: none;
+    color: v.$form-text-color;
+
+    &:hover{
+      color: #22F267;
+    }
+  }
+  .current{
+    color: #22F267;
+    text-decoration: underline;
+    text-underline-offset: 4px;
+    text-decoration-color: #22F267;
+    text-decoration-thickness: 2px;
+  }
+}

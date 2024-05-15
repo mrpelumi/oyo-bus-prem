@@ -1,0 +1,11 @@
+@use '../../variables' as v;
+
+
+textarea{
+  border-radius: v.$main-border-radius;
+  color: v.$greeting-color;
+  padding: 0.7rem;
+  font-size: 1rem;
+  resize: none;
+  outline: none;
+}

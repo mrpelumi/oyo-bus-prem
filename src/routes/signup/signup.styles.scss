@@ -1,0 +1,24 @@
+@use '../../variables' as v;
+
+.login-option{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  gap: 0.5rem;
+
+  span:first-child{
+    color: v.$greeting-color;
+  }
+  .login-link{
+    color: v.$auth-link-color;
+    text-decoration: none;
+    transition: all 1s ease-out;
+
+    &:hover{
+      text-decoration: underline;
+      text-underline-offset: 3px;
+  }
+  }
+}

@@ -1,0 +1,11 @@
+@use '../../variables' as v;
+
+input{
+  border: 1px solid v.$form-input-color;
+  height: 2.5rem;
+  border-radius: 7px;
+  padding: 0.5rem;
+  font-size: 1rem;
+  color: v.$greeting-color;
+  outline: v.$nav-logo-color;
+}

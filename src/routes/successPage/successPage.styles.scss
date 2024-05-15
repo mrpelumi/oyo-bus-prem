@@ -1,0 +1,72 @@
+@use '../../variables' as v;
+
+.success-main-container{
+  display: flex;
+  flex-direction: column;
+  gap: 1.7rem;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+}
+
+.success-header{
+  h1{
+    color: #F26722;
+  }
+}
+
+.success-text{
+  width: 40%;
+  display: flex;
+  flex-direction: row;
+  gap: 0.8rem;
+  span{
+    color: v.$save-button-color;
+    font-size: 1.3rem;
+  }
+}
+
+.certificate-text{
+  width: 40%;
+  display: flex;
+  flex-direction: row;
+  gap: 0.8rem;
+  span{
+    color: v.$save-button-color;
+    font-size: 1.3rem;
+  }
+}
+.certificate-btn{
+  width: 40%;
+
+  button{
+    background-color: #15331F;
+    color: #fff;
+    padding: 0.6rem;
+    font-size: 1rem;
+    border-radius: v.$main-border-radius;
+    display: flex;
+    flex-direction: row;
+    gap: 0.7rem;
+    font-weight: bold;
+
+    &:hover{
+      cursor: pointer;
+      border: 1px solid #15331F;
+      color: #15331F;
+      background-color: #fff;
+    }
+  }
+}
+.home-link-container{
+  width: 40%;
+  .home-link-txt{
+    color: #15331F;
+    text-decoration: none;
+
+    &:hover{
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+  }
+}

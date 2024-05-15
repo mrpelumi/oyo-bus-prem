@@ -1,0 +1,81 @@
+@use '../../variables' as v;
+.login-body-container{
+  padding: 3.1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-image: url('../../assets/bg-image.png');
+  background-repeat: no-repeat;
+  background-size: cover;
+  gap: 1.5rem;
+}
+.greeting-container{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+
+  span:first-child{
+    font-weight:600;
+    font-size: 1.7rem;
+    color: v.$greeting-color;
+  }
+  span:last-child{
+    font-size: 0.9rem;
+    color: v.$greeting-color;
+  }
+}
+.main-form-container{
+  width: 30%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1.1rem;
+}
+.form-extra-container{
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  justify-content: space-between;
+  font-size: 0.9rem;
+  padding: 0.5rem;
+
+  .forgot-p-link{
+    color: v.$greeting-color;
+    text-decoration: none;
+
+    &:hover{
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+  }
+
+  .sign-up-option{
+    display: flex;
+    flex-direction: row;
+    gap: 0.6rem;
+    color: v.$greeting-color;
+
+    .sign-up-link{
+      color: v.$auth-link-color;
+      text-decoration: none;
+      transition: all 1s ease-out;
+
+      &:hover{
+        text-decoration: underline;
+        text-underline-offset: 3px;
+      }
+    }
+  }
+}
+.consultant-container{
+  width: 100%;
+  padding: 0.5rem;
+  color: v.$greeting-color;
+  font-size: 0.8rem;
+  font-weight: bold;
+  text-align: center;
+}

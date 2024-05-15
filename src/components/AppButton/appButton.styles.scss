@@ -1,0 +1,32 @@
+@use '../../variables' as v;
+.app-button{
+  padding: 0.8rem 2rem 0.8rem 2rem;
+  font-weight: bold;
+  font-size: 1.1rem;
+  color: white;
+  border-radius: v.$main-border-radius;
+  border: none;
+  outline: none;
+
+  &:hover{
+    cursor: pointer;
+  }
+}
+.save-button{
+  background-color: v.$save-button-color;
+
+  &:hover{
+    border: 1px solid v.$save-button-color;
+    background-color: #fff;
+    color: v.$save-button-color;
+  }
+}
+.other-button{
+  background-color: v.$other-button-color;
+
+  &:hover{
+    border: 1px solid v.$other-button-color;
+    background-color: #fff;
+    color: v.$other-button-color;
+  }
+}

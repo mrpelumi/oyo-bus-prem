@@ -1,0 +1,33 @@
+@use '../../variables' as v;
+
+.input-section{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 2rem;
+  gap: 1rem;
+  background-color: #fff;
+  border-radius: v.$main-border-radius;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+}
+
+.section-one, .section-two{
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  width: 48%;
+
+  .input-container{
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+
+    label{
+      font-size: 0.9rem;
+      color: v.$form-text-color;
+    }
+  }
+  .error-container{
+    color: rgb(242, 122, 122);;
+  }
+}

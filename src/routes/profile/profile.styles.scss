@@ -1,0 +1,32 @@
+@use '../../variables' as v;
+
+.app-main-container{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  // border: 1px solid;
+  padding: 4rem 1.5rem 1.2rem 1.5rem;
+  gap: 1.2rem;
+  background-image: url('../../assets/app-bg-img.png');
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+.app-header-container{
+  display: flex;
+  flex-direction: row;
+  // border: 1px solid;
+  padding: 0.5rem;
+  justify-content: center;
+  align-items: center;
+  gap: 0.7rem;
+
+  .header-icon{
+    height: 2.4rem;
+    color: v.$greeting-color;
+  }
+  span{
+    font-size: 2rem;
+    color: v.$greeting-color;
+  }
+}

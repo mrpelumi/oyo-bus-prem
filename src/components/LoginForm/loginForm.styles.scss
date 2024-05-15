@@ -1,0 +1,27 @@
+@use '../../variables' as v;
+
+.login-form-container{
+  display: flex;
+  flex-direction: column;
+  padding: 2.5rem;
+  width: 100%;
+  gap: 0.8rem;
+  background-color: #fff;
+  border-radius: v.$main-border-radius;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+
+  div{
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+
+    label{
+      font-size: 0.9rem;
+      color: v.$form-text-color;
+      font-weight: bold;
+    }
+  }
+  .error-container{
+    color: rgb(242, 122, 122);
+  }
+}
