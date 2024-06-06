@@ -16,3 +16,15 @@
     cursor: pointer;
   }
 }
+
+.auth-btn-disabled{
+  padding: 0.8rem;
+  border-radius: 7px;
+  outline: none;
+  border: none;
+  font-size: 1rem;
+  font-weight: bold;
+  color: v.$button-text-color;
+  cursor:progress;
+  background-color: #cd720b;
+}

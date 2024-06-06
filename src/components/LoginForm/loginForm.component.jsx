@@ -1,16 +1,33 @@
 import './loginForm.styles.scss';
 import { useNavigate } from 'react-router-dom';
 import {useForm} from 'react-hook-form';
+import { signInAuthWithEmailAndPassword, setAuthPersistence } from 
+'../../utils/firebase';
+import { useDispatch } from 'react-redux';
+import { setCurrentUser } from '../../store/user/user.reducer';
 import AuthButton from '../AuthButton/authButton.component';
 import AuthInput from '../AuthInput/authInput.component';
 
 const LoginForm = () =>{
-  const {register, handleSubmit, formState: {errors}} = useForm();
+  const {register, setError, handleSubmit, formState: {errors, isSubmitting}} = useForm({criteriaMode: 'all'});
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const onSubmitHandler = (data) => {
-    console.log(data);
-    navigate('/app')
+  // Login function with authorization
+  const onSubmitHandler = async (data) => {
+    const {email, password} = data;
+    setAuthPersistence()
+    .then(async () => {
+      await signInAuthWithEmailAndPassword(email, password)
+      .then((response) => {
+        dispatch(setCurrentUser(response.user.email));
+        localStorage.setItem('Auth_Token', response._tokenResponse.refreshToken);
+        navigate('/app')
+      })
+    })
+    .catch(error => {
+      setError('root.serverError', {type: error.code, message:'Incorrect Email or Password'})
+    })
   }
 
   const emailInput = {...register("email", {
@@ -25,6 +42,9 @@ const LoginForm = () =>{
 
   return (
     <form className='login-form-container' onSubmit={handleSubmit(onSubmitHandler)}>
+      <div>
+        {errors.root && errors.root.serverError.type === "auth/invalid-credential" && <div className='root-error'>Incorrect Email or Password</div> }
+      </div>
       <div>
         <label htmlFor="">Email</label>
         <AuthInput options={emailInput} type={"email"} />
@@ -43,7 +63,7 @@ const LoginForm = () =>{
           {errors.password.message}  
         </div>}
       </div>
-      <AuthButton name="LOGIN" />
+      <AuthButton name="LOGIN" isSubmitting={isSubmitting} />
     </form>
   )
 }

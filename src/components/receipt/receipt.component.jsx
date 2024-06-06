@@ -1,58 +1,35 @@
 import './receipt.styles.scss';
+import { useSelector } from 'react-redux';
+import {selectReceipt} from '../../store/receipt/receipt.selector';
 
-const receipt_json = {
-  businessName: 'Hartway',
-  transactionId: "0043",
-  taxList: [
-    {
-      name: "Tax 001",
-      taxValue: 60000
-    },
-    {
-      name: "Tax 002",
-      taxValue: 400000
-    },
-    {
-      name:"Tax 003",
-      taxValue: 43200000
-    },
-    {
-      name: "VAT",
-      taxValue: 342000},
-  ],
-  totalValue: 40000000
-}
 
 const Receipt = () => {
-  const transId = receipt_json.transactionId;
-  const busName = receipt_json.businessName;
-  const taxList = receipt_json.taxList;
-  const totalValue = receipt_json.totalValue;
+  const receiptObj = useSelector(selectReceipt);
+  const {busName, date, fees, total, transactionId} = receiptObj;
+
+
   return (
     <div className='receipt-container'>
       <div className='invoice-header'>
         <span>Tax Invoice</span>
       </div>
       <div className='invoice-date'>
-        <span>Date: 04/04/2024</span>
+        <span>Date: {date}</span>
       </div>
       <div className='comp-transid'>
         <span>Company: {busName}</span>
-        <span>Transaction ID: {transId}</span>
+        <span>Transaction ID: {transactionId.substr(0, 8)}</span>
       </div>
       <hr />
       <div className='tax-list'>
-        {taxList.map((taxItem, id) => {
-          return (
-            <div className='tax-item' key={id}>
-              <span>{taxItem.name}</span>
-              <span>&#8358;{taxItem.taxValue}</span>
-            </div>
-          )
-        }) }
+        <div className='tax-item'>
+          <span>{"Tax Fee"}</span>
+          <span>&#8358; {fees}</span>
+        </div>
         <hr />
         <div className='tax-total'>
-          <span>{totalValue}</span>
+          <span>Total</span>
+          <span>&#8358; {total}</span>
         </div>
       </div>
       <hr />

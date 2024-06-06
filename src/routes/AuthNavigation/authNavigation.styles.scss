@@ -3,6 +3,7 @@
 .main-container{
   display: flex;
   flex-direction: column;
+  height: 100%;
 }
 .nav-container{
   display: flex;
@@ -53,5 +54,19 @@
   .bottom{
     font-size: 0.9rem;
     color: v.$nav-logo-color;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .nav-item-container{
+    width: 80%;
+  }
+  .nav-brand-name{
+    .header{
+      font-size: 0.7rem;
+    }
+    .bottom{
+      font-size: 0.6rem;
+    }
   }
 }

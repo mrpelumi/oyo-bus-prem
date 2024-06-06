@@ -1,17 +1,16 @@
 /* eslint-disable react/prop-types */
 import './busInput.styles.scss';
+import { useRef, useState } from 'react';
 import Select from 'react-select';
 import { Controller } from 'react-hook-form';
 import AuthInput from '../AuthInput/authInput.component';
 import TextAreaInput from '../textAreaInput/textAreaInput.component';
 
+import { useDispatch, useSelector } from 'react-redux';
+import { selectBusSector } from '../../store/busSector/busSector.selector';
+import { getDocBusinessType } from '../../utils/firebase';
+import { setBusSectorName } from '../../store/busSectorSingle/busSectorSingle.reducer';
 
-const businessTypes = [
-  {label: 'Restaurant', value: 'Restaurant'},
-  {label: 'Cinema House', value: 'Cinema House'},
-  {label: 'Supermarket', value: 'Supermarket'},
-  {label: 'Mini market', value: 'Mini market'}
-]
 
 const customStyles = {
   control: (provided) => ({
@@ -32,24 +31,43 @@ const customStyles = {
   }),
 };
 
-const BusInput = ({register, errors, control}) => {
+const BusInput = ({register, errors, control, readOnlyVal, readOnlyExtra}) => {
+  // main Business list
+  const busSelector = useSelector(selectBusSector);
+  const busSectorList = Object.values(busSelector);
+  const busSectorObj = busSectorList.map(item => {return {label: item, value: item}})
+  const [subName, setSubName] = useState([]);
+  const dispatch = useDispatch();
+
+  const SelectBusType = useRef(null);
 
   const busNameInput = {...register("busName", {
     required:"Name is required",
     maxLength:255
-    }), minLength: 3
+    }), minLength: 3, readOnly:readOnlyVal
   }
 
   const taxIdInput = {...register("taxId", {
-    required: "Tax ID is required",
     maxLength: 100
   }), minLength: 5, pattern: "[0-9]", placeholder: "Enter your TIN"}
 
   const busAddInput = {...register("busAdd", {
     required: "Address is required",
     maxLength: 300
-  }), minLength: 5}
+  }), minLength: 5, readOnly: readOnlyExtra}
 
+
+  // Change Select Options
+  const SelectHandler = async (data) => {
+    const currentBusSector = data.value;
+    dispatch(setBusSectorName(currentBusSector));
+    
+    const subBusTypes = await getDocBusinessType(currentBusSector);
+    const subNameList = Object.values(subBusTypes.subBusList);
+    const subBusNameObj = subNameList.map((item) => {return {label:item.subBusType, value:item.subBusType}})
+    setSubName(subBusNameObj)
+    SelectBusType.current.focus();
+  }
   return(
     <div className='input-section'>
       <div className='section-one'>
@@ -62,12 +80,27 @@ const BusInput = ({register, errors, control}) => {
               {errors.busName.message}  
             </div>}
         </div>
+
         <div className='input-container'>
           <label htmlFor="">Nature of Business</label>
+          <Controller name='businessNature' control={control} render={({
+            field: { value}
+          }) => (
+            <Select className='select-business' isSearchable={true} styles={customStyles} onChange={SelectHandler} value={value} options={busSectorObj} />
+          )} /> 
+        </div>
+        <div className='error-container'>
+            {errors.businessNature&& <div>
+              {errors.businessNature.message}  
+            </div>}
+        </div>
+        {/* Conditional based on business */}
+        <div className='input-container'>
+          <label htmlFor="">Type of Business</label>
           <Controller name='businessType' control={control} render={({
             field: {onChange, onBlur, value}
           }) => (
-            <Select className='select-business' isSearchable={false} styles={customStyles} onChange={onChange} onBlur={onBlur} value={value} options={businessTypes} />
+            <Select className='select-business' isSearchable={false} styles={customStyles} onChange={onChange} onBlur={onBlur} value={value} options={subName} ref={SelectBusType} required={"Select an option"} />
           )} rules={{ required: 'Select an option '}} />
         </div>
         <div className='error-container'>
@@ -75,7 +108,10 @@ const BusInput = ({register, errors, control}) => {
               {errors.businessType.message}  
             </div>}
         </div>
-        <div className='input-container'>
+        
+      </div>
+      <div className='section-two'>
+      <div className='input-container'>
           <label htmlFor="">Tax Identification Number</label>
           <AuthInput options={taxIdInput} type={"text"} />
         </div>
@@ -84,8 +120,6 @@ const BusInput = ({register, errors, control}) => {
               {errors.taxId.message}  
             </div>}
         </div>
-      </div>
-      <div className='section-two'>
         <div className='input-container'>
           <label htmlFor="">Business Address</label>
           <TextAreaInput options={busAddInput} />

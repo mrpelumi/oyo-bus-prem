@@ -31,3 +31,14 @@
     color: rgb(242, 122, 122);;
   }
 }
+
+@media screen and (max-width:576px) {
+  .input-section{
+    display: flex;
+    flex-direction: column;
+
+    .section-one, .section-two{
+      width: 100%;
+    }
+  }
+}

@@ -1,11 +1,15 @@
 import './successPage.styles.scss';
 import {Link} from 'react-router-dom';
+import { Alert } from 'react-st-modal';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import { faSquareCheck } from '@fortawesome/free-solid-svg-icons';
 import { faCertificate } from '@fortawesome/free-solid-svg-icons';
 
 
 const SuccessPage = () => {
+  const onPrintHandler = async () => {
+    await Alert("Print Feature coming soon", "Print Feature")
+  }
   return (
     <div className='success-main-container'>
       <div className='success-header'>
@@ -20,7 +24,7 @@ const SuccessPage = () => {
         <span>Certificate ready</span>
       </div>
       <div className='certificate-btn'>
-        <button>Print Certificate</button>
+        <button onClick={onPrintHandler}>Print Certificate</button>
       </div>
       <div className='home-link-container'>
         <Link to={'/app/tax'} className={'home-link-txt'}>Go to Home</Link>

@@ -30,3 +30,13 @@
     color: v.$other-button-color;
   }
 }
+.app-btn-disabled{
+  background-color: v.$save-button-color;
+  padding: 0.8rem 2rem 0.8rem 2rem;
+  font-weight: bold;
+  font-size: 1.1rem;
+  color: white;
+  border-radius: v.$main-border-radius;
+  border: none;
+  outline: none;
+}

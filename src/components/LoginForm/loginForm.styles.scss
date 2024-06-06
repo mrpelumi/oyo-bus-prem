@@ -24,4 +24,13 @@
   .error-container{
     color: rgb(242, 122, 122);
   }
+  .root-error{
+    border-radius: v.$main-border-radius;
+    padding: 0.5rem;
+    background-color: rgb(242, 122, 122);
+    color: white;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+  }
 }

@@ -70,3 +70,36 @@
     }
   }
 }
+
+@media screen and (max-width:768px) {
+  .success-text{
+    width: 70%;
+  }
+  .certificate-text{
+    width: 70%;
+  }
+}
+
+@media screen and (max-width:576px) {
+  .success-main-container{
+    justify-content: flex-start;
+    align-items: flex-start;
+  }
+  .success-header{
+    h1{
+      font-size: 1.7rem;
+    }
+  }
+  .success-text{
+    width: 85%;
+    span{
+      font-size: 1.2rem;
+    }
+  }
+  .certificate-text{
+    span{
+      font-size: 1.2rem;
+    }
+    width: 85%;
+  }
+}

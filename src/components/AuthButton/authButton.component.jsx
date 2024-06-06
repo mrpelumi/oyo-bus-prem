@@ -1,8 +1,8 @@
 import './authButton.styles.scss';
 
-const AuthButton = ({name}) => {
+const AuthButton = ({name, isSubmitting=false}) => {
   return (
-    <button className='auth-button' type="submit">{name}</button>
+    <button className={isSubmitting ? 'auth-btn-disabled' : 'auth-button'} type="submit" disabled={isSubmitting}>{isSubmitting ? "Loading..." : name}</button>
   )
 }
 

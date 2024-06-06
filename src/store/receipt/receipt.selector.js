@@ -1,0 +1,1 @@
+export const selectReceipt = (state) => state.receipt.receiptVal;

@@ -1,5 +1,9 @@
 import './App.scss';
 import {Routes, Route} from 'react-router-dom';
+import { useEffect } from 'react';
+
+import { onAuthStateChangedListener } from './utils/firebase';
+
 import AuthNavigation from './routes/AuthNavigation/authNavigation.component';
 import Login from './routes/Login/login.component';
 import Signup from './routes/signup/signup.component';
@@ -9,7 +13,18 @@ import TaxApp from './routes/taxApp/taxApp.component';
 import TaxForm from './routes/taxForm/taxForm.component';
 import SuccessPage from './routes/successPage/successPage.component';
 
+
 function App() {
+
+  useEffect(() => {
+    const subscribe = onAuthStateChangedListener((user) => {
+      if (user){
+        const uid = user.uid;
+      }
+    })
+
+    return subscribe;
+  }, [])
 
   return (
     <Routes>
