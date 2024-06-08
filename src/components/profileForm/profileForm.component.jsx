@@ -47,6 +47,7 @@ const ProfileForm = () => {
             setValue("firstName", qUserData.firstName);
             setValue("lastName", qUserData.lastName);
             setValue("busAdd", qUserData.busAdd);
+            setValue("busBranch", qUserData.busBranch);
             readOnlyVal.current = true;
             profileDocId.current = item.id
           })
@@ -74,7 +75,8 @@ const ProfileForm = () => {
       const updateData = {
         firstName: data.firstName,
         lastName: data.lastName,
-        busAdd: data.busAdd
+        busAdd: data.busAdd,
+        busBranch: data.busBranch
       }
       const currentProfile = await getDocProfileEmpty(currentUser);
       if (currentProfile){

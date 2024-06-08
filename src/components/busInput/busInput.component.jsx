@@ -47,6 +47,10 @@ const BusInput = ({register, errors, control, readOnlyVal, readOnlyExtra}) => {
     }), minLength: 3, readOnly:readOnlyVal
   }
 
+  const busBranchInput = {...register("busBranch", {
+      required: "Enter Number of Business Branch",
+    }), min: 1, readOnly: readOnlyExtra}
+
   const taxIdInput = {...register("taxId", {
     maxLength: 100
   }), minLength: 5, pattern: "[0-9]", placeholder: "Enter your TIN"}
@@ -111,6 +115,15 @@ const BusInput = ({register, errors, control, readOnlyVal, readOnlyExtra}) => {
         
       </div>
       <div className='section-two'>
+      <div className='input-container'>
+        <label htmlFor="">Name of Branches in Ondo</label>
+        <AuthInput options={busBranchInput} type={"number"} />
+      </div>
+      <div className='error-container'>
+          {errors.busBranchInput && <div>
+            {errors.busBranchInput.message}  
+          </div>}
+      </div>
       <div className='input-container'>
           <label htmlFor="">Tax Identification Number</label>
           <AuthInput options={taxIdInput} type={"text"} />

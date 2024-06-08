@@ -11,6 +11,7 @@ import {v4 as uuidv4} from 'uuid';
 import { useDispatch } from 'react-redux';
 import {useFlutterwave, closePaymentModal} from 'flutterwave-react-v3';
 
+
 import { setNewReceipt } from '../../store/receipt/receipt.reducer';
 
 import AppButton from "../../components/AppButton/appButton.component";
@@ -63,11 +64,14 @@ const TaxForm = () => {
     payment_options: 'card',
     customer: {},
     customizations: {
-      title: 'Tax Payment',
-      description: 'Payment of Tax for Ondo State',
+      title: 'Business Premises Payment',
+      description: 'Business Premises Payment for Ondo State',
       logo: 'https://st2.depositphotos.com/4403291/7418/v/450/depositphotos_74189661-stock-illustration-online-shop-log.jpg',
     },
   }
+
+  // Flutterwave function
+  const handleFlutterPayment = useFlutterwave(config);
 
   useEffect(() => {
     // Fill Tax Profile form
@@ -87,6 +91,7 @@ const TaxForm = () => {
         setValue("phoneNo", qTaxProfileData.phoneNo);
         setValue("busName",qTaxProfileData.busName);
         setValue("busAdd", qTaxProfileData.busAdd);
+        setValue("busBranch", qTaxProfileData.busBranch);
       })
     } 
     getDate();
@@ -101,10 +106,10 @@ const TaxForm = () => {
     if (location.pathname === '/app/tax' || location.pathname === '/app/tax/') {
       return navigate('/app/tax/business')
     } else if(location.pathname === '/app/tax/business' || location.pathname === '/app/tax/business/'){
-      const {busAdd, busName, businessType, email, firstName, lastName,taxId} = data;
+      const {busAdd, busName, busBranch, businessType, email, firstName, lastName,taxId} = data;
       const qTaxAppEmpty = await getDocTaxAppEmpty(email);
       const taxuserProfile = {firstName, lastName, email};
-      const taxBusiness = {busName, busAdd, businessType:businessType.value, taxId};
+      const taxBusiness = {busName, busBranch, busAdd, businessType:businessType.value, taxId};
       const qTaxApp = await getDocTaxApp(email);
       
       const subBusTypes = await getDocBusinessType(sectorName);
@@ -126,14 +131,13 @@ const TaxForm = () => {
           
           // fees for receipt
           taxFee.current = busTypeObj.map(item => item.newRegFee);
-          const total = taxFee.current;
+          const total = taxFee.current * Number(busBranch);
           const currentPaymentStatus = paymentStatus.current;
           const taxUuid = uuidv4();
           await docTaxApp({profile: taxuserProfile, business: taxBusiness, newPayee, paymentStatus:currentPaymentStatus, date:currentDate, appId: taxUuid});
 
-          const receiptObj = {busName, email, date:currentDate, fees:taxFee.current, transactionId:resultUuid, total, paymentStatus:currentPaymentStatus};
+          const receiptObj = {busName, busBranch, email, date:currentDate, fees:taxFee.current, transactionId:resultUuid, total, paymentStatus:currentPaymentStatus};
           const updatedStatus = "processing";
-          console.log("faraway");
           dispatch(setNewReceipt(receiptObj));
           dispatch(setAppStatus(updatedStatus))
           
@@ -159,9 +163,9 @@ const TaxForm = () => {
               const resultUuid =  uuidv4();
               
               taxFee.current = busTypeObj.map(item => item.annualFee);
-              const total = taxFee.current;
+              const total = taxFee.current * Number(busBranch);
               const currentPaymentStatus = paymentStatus.current;
-              const receiptObj = {busName, email, date:currentDate, fees:taxFee.current,total,  transactionId:resultUuid, paymentStatus:currentPaymentStatus};
+              const receiptObj = {busName, email, busBranch, date:currentDate, fees:taxFee.current, total,  transactionId:resultUuid, paymentStatus:currentPaymentStatus};
               dispatch(setNewReceipt(receiptObj));
               const updatedStatus = "processing";
               dispatch(setAppStatus(updatedStatus));
@@ -181,10 +185,10 @@ const TaxForm = () => {
           } 
           
           const resultUuid =  uuidv4();
-          const total = taxFee.current;
+          const total = taxFee.current * Number(busBranch);
           
           const currentPaymentStatus = paymentStatus.current;
-          const receiptObj = {busName, email, date:currentDate, fees:taxFee.current,total,  transactionId:resultUuid, paymentStatus:currentPaymentStatus};
+          const receiptObj = {busName, email, busBranch, date:currentDate, fees:taxFee.current,total,  transactionId:resultUuid, paymentStatus:currentPaymentStatus};
           dispatch(setNewReceipt(receiptObj));
           const updatedStatus = "processing";
           dispatch(setAppStatus(updatedStatus));
@@ -206,13 +210,10 @@ const TaxForm = () => {
       taxAppDocId.current = item.id;
     })
     
-    const handleFlutterPayment = useFlutterwave(config);
-
     try{
       handleFlutterPayment({
         callback: (response) => {  
           if (response.status === "successful"){
-            console.log("worked")
             dispatch(setNewReceipt({paymentStatus:true}))
             dispatch(setAppStatus("completed"))
             docTaxReceipt({...receiptObj, paymentStatus:true});

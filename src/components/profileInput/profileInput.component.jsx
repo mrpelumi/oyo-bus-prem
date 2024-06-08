@@ -53,7 +53,16 @@ const ProfileInput = ({register, errors, readOnlyVal=false, readOnlyExtra=false}
       required: "Enter business name",
       maxLength: 255
     }), minLength: 3, readOnly: readOnlyVal},
-    errorName: "busName"
+    errorName: "busName",
+    type:"text"
+  },
+  {
+    name: "Number of Branches in Ondo",
+    busNameInput: {...register("busBranch", {
+      required: "Enter Number of Business Branch",
+    }), min: 1, readOnly: readOnlyExtra},
+    errorName: "busName",
+    type:"number"
   }
 ]
 
@@ -87,7 +96,7 @@ const ProfileInput = ({register, errors, readOnlyVal=false, readOnlyExtra=false}
               <Fragment key={idx}>
                 <div className='input-container'>
                   <label htmlFor="">{item.name}</label>
-                  <AuthInput options={item.busNameInput} type={"text"}/>
+                  <AuthInput options={item.busNameInput} type={item.type}/>
                 </div>
                 <div className='error-container'>
                   {errors[item.errorName] && <div>

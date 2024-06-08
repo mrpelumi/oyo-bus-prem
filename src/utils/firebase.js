@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getAuth, createUserWithEmailAndPassword, onAuthStateChanged,
-signInWithEmailAndPassword, setPersistence, browserSessionPersistence, signOut } from "firebase/auth";
+signInWithEmailAndPassword, sendPasswordResetEmail ,setPersistence, browserSessionPersistence, signOut } from "firebase/auth";
 import {getFirestore, collection, addDoc, query, where, getDocs, updateDoc, doc, getDoc} from "firebase/firestore";
 
 // Your web app's Firebase configuration
@@ -183,4 +183,9 @@ export const createAuthUserWithEmailAndPassword = async (email, password) => {
 
 export const onAuthStateChangedListener = (callback) => {
   onAuthStateChanged(auth, callback)
+}
+
+export const sendAuthPasswordResetEmail = async (email) => {
+  if (!email) return;
+  return await sendPasswordResetEmail(auth, email)
 }

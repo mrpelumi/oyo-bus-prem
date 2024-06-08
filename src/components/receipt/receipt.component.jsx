@@ -5,7 +5,7 @@ import {selectReceipt} from '../../store/receipt/receipt.selector';
 
 const Receipt = () => {
   const receiptObj = useSelector(selectReceipt);
-  const {busName, date, fees, total, transactionId} = receiptObj;
+  const {busName, busBranch, date, fees, total, transactionId} = receiptObj;
 
 
   return (
@@ -18,13 +18,18 @@ const Receipt = () => {
       </div>
       <div className='comp-transid'>
         <span>Company: {busName}</span>
-        <span>Transaction ID: {transactionId.substr(0, 8)}</span>
+        <span>Transaction ID: {transactionId ? transactionId.substr(0, 8) : null}</span>
       </div>
       <hr />
       <div className='tax-list'>
         <div className='tax-item'>
           <span>{"Tax Fee"}</span>
           <span>&#8358; {fees}</span>
+        </div>
+        <hr />
+        <div className='tax-item'>
+          <span>{"Number of Branches"}</span>
+          <span>{busBranch}</span>
         </div>
         <hr />
         <div className='tax-total'>

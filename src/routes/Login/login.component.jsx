@@ -13,7 +13,7 @@ const Login = () => {
         <LoginForm />
         <div className='form-extra-container'>
           <div className='forgot-p-container'>
-            <span><Link className={'forgot-p-link'}>Forgot Password?</Link></span>
+            <span><Link to={'/forgot-password'} className={'forgot-p-link'}>Forgot Password?</Link></span>
           </div>
           <div className='sign-up-option'>
             <span>Don't have an account?</span>

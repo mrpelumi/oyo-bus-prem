@@ -12,6 +12,7 @@ import Profile from './routes/profile/profile.component';
 import TaxApp from './routes/taxApp/taxApp.component';
 import TaxForm from './routes/taxForm/taxForm.component';
 import SuccessPage from './routes/successPage/successPage.component';
+import ForgotPassword from './routes/forgotPassword/forgotPassword.component';
 
 
 function App() {
@@ -31,6 +32,7 @@ function App() {
       <Route path='/'  element={<AuthNavigation />}>
         <Route index element={<Login />} />
         <Route path='/signup' element={<Signup />} />
+        <Route path='/forgot-password' element={<ForgotPassword />} />
       </Route>
       <Route path='/app' element={<Navigation />}>
         <Route index element={<Profile />} />
