@@ -57,7 +57,7 @@ const TaxForm = () => {
   const {register, setError, formState: {errors}, setValue, handleSubmit,control} = useForm();
 
   const config = {
-    public_key: 'FLWPUBK_TEST-06fc1afee151daf57c2ef5fb420841a2-X',
+    public_key: import.meta.env.VITE_SECURE_FLUTTER_KEY,
     tx_ref: receiptObj.transactionId,
     amount: receiptObj.total,
     currency: 'NGN',
