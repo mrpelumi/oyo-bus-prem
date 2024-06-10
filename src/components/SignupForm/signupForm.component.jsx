@@ -11,6 +11,7 @@ import { setAuthPersistence, createAuthUserWithEmailAndPassword, QEmailUserAuth,
 
 import AuthButton from '../AuthButton/authButton.component';
 import AuthInput from '../AuthInput/authInput.component';
+import { setCurrentUserId } from '../../store/userId/userId.reducer';
 
 // Password and Confirm Password Validation
 const schema = z.object({
@@ -56,7 +57,8 @@ const SignupForm = () =>{
       await createAuthUserWithEmailAndPassword(email, password)
       .then((response) => {
         dispatch(setCurrentUser(response.user.email));
-        docUserAuth({email, phoneNo});
+        dispatch(setCurrentUserId(response.user.uid));
+        docUserAuth(response.user.uid,{email, phoneNo});
         localStorage.setItem('Auth_Token', response._tokenResponse.refreshToken)
         navigate('/app')
       })

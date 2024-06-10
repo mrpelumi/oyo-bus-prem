@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import {selectCurrentUser} from '../../store/user/user.selector';
+import { selectCurrentUserId } from '../../store/userId/userId.selector';
 import { getDocAuth, onAuthStateChangedListener, getDocProfile, docUserProfile, getDocProfileEmpty, updateUserProfile } from '../../utils/firebase';
 
 import AppButton from '../AppButton/appButton.component';
@@ -16,6 +17,7 @@ const ProfileForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const dispatch = useDispatch();
   const currentUser = useSelector(selectCurrentUser);
+  const currentUserId = useSelector(selectCurrentUserId);
   const {register, formState: {errors}, handleSubmit, setValue, reset} = useForm();
   const navigate = useNavigate();
   const userResponse = useRef({});
@@ -80,7 +82,7 @@ const ProfileForm = () => {
       }
       const currentProfile = await getDocProfileEmpty(currentUser);
       if (currentProfile){
-        docUserProfile(data);
+        docUserProfile(currentUserId, data);
         setSuccessMsg("Profile has been created!!!");
       }else {
         updateUserProfile(profileDocId.current, updateData);

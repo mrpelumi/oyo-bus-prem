@@ -1,7 +1,7 @@
 import { initializeApp } from "firebase/app";
 import { getAuth, createUserWithEmailAndPassword, onAuthStateChanged,
 signInWithEmailAndPassword, sendPasswordResetEmail ,setPersistence, browserSessionPersistence, signOut } from "firebase/auth";
-import {getFirestore, collection, addDoc, query, where, getDocs, updateDoc, doc, getDoc} from "firebase/firestore";
+import {getFirestore, collection, addDoc, query, where, getDocs, updateDoc, doc, getDoc, setDoc} from "firebase/firestore";
 
 // Your web app's Firebase configuration
 
@@ -104,19 +104,20 @@ export const getDocTaxAppEmpty = async (email) => {
 }
 
 // Add document to userAuth
-export const docUserAuth = async (userObj) => {
+export const docUserAuth = async (uid, userObj) => {
   try {
-    await addDoc(collection(db, "userAuth"), userObj);
-    // console.log("Document created with ID: ", docRef.id)
+    const userAuthDocRef = doc(userAuthRef, uid);
+    await setDoc(userAuthDocRef, userObj);
   } catch(e) {
     console.log(e);
   }
 }
 
 // Add Document to userProfile
-export const docUserProfile = async (profileObj) => {
+export const docUserProfile = async (uid, profileObj) => {
   try {
-    await addDoc(collection(db, "userProfile"), profileObj)
+    const userProfileDocRef = doc(userProfileRef, uid)
+    await setDoc(userProfileDocRef, profileObj)
   } catch(e){
     console.log(e);
   }
