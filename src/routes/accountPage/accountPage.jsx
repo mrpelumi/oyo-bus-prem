@@ -26,11 +26,11 @@ const AccountPage = () => {
       <div className='account-form'>
         <div className='account-item'>
           <span className='acc-title'>Account Name</span>
-          <span>Ministry of Commerce and Business</span>
+          <span>ODSG Revenue Transit Account</span>
         </div>
         <div className='account-item'>
           <span className='acc-title'>Account Number</span>
-          <span>1200000201</span>
+          <span>1000301458</span>
         </div>
         <div className='account-item'>
           <span className='acc-title'>Bank</span>
