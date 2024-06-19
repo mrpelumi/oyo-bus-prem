@@ -1,0 +1,21 @@
+@use '../../variables' as v;
+
+.arrears-select{
+  padding: 0.7rem;
+  font-size: 1rem;
+  color: v.$greeting-color;
+  border-color: v.$form-input-color;
+  border-radius: v.$main-border-radius;
+  
+
+  &:hover{
+    border-color: rgb(199, 194, 194);
+  }
+
+  option{
+    font-size: 1rem;
+    padding: 2rem;
+    border-radius: v.$main-border-radius;
+    background-color: white;
+  }
+}

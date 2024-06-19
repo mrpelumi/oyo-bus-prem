@@ -13,7 +13,8 @@ import TaxApp from './routes/taxApp/taxApp.component';
 import TaxForm from './routes/taxForm/taxForm.component';
 import SuccessPage from './routes/successPage/successPage.component';
 import ForgotPassword from './routes/forgotPassword/forgotPassword.component';
-
+import AccountPage  from './routes/accountPage/accountPage';
+import PayUploadPage from './routes/payUpload/payUpload.component';
 
 function App() {
 
@@ -41,6 +42,8 @@ function App() {
           <Route path='/app/tax/business' element={<TaxForm />} />
           <Route path='/app/tax/receipt' element={<TaxForm />} />
         </Route>
+        <Route path='/app/accountPage' element={<AccountPage />} />
+        <Route path='/app/payUploadPage' element={<PayUploadPage />} />
         <Route path='/app/success' element={<SuccessPage />} />
       </Route>
     </Routes>

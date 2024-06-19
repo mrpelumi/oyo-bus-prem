@@ -9,8 +9,8 @@ import { getDocProfile, docTaxApp, getDocTaxAppEmpty, getDocTaxApp, docTaxReceip
 import {Confirm} from 'react-st-modal';
 import {v4 as uuidv4} from 'uuid';
 import { useDispatch } from 'react-redux';
-import {useFlutterwave, closePaymentModal} from 'flutterwave-react-v3';
 
+import { handleS3Upload } from '../../utils/awsS3';
 
 import { setNewReceipt } from '../../store/receipt/receipt.reducer';
 
@@ -27,12 +27,18 @@ import { setBusSector } from '../../store/busSector/busSector.reducer';
 import { selectBusSectorName } from '../../store/busSectorSingle/busSectorSingle.selector';
 
 
-const getDate = () => {
+const getYear = () => {
   const today = new Date();
-  const month = today.getMonth() + 1;
   const year = today.getFullYear();
-  const date = today.getDate();
-  return `${date}/${month}/${year}`
+  return `${year}-01-01`
+}
+
+const getToday = () => {
+  const today = new Date();
+  const year = today.getFullYear();
+  const month = today.getMonth() + 1;
+  const day = today.getDate()
+  return `${year}-${month}-${day}`
 }
 
 const TaxForm = () => {
@@ -50,28 +56,13 @@ const TaxForm = () => {
   const dispatch = useDispatch();
   const taxAppDocId = useRef("");
   const taxFee = useRef();
+  const formData = new FormData();
 
-  const [currentDate, setCurrentDate] = useState(getDate());
+  const [currentYear, setCurrentYear] = useState(getYear());
+  const [currentDate, setCurrentDate] = useState(getToday());
   const [uuidVal, setUuidVal] = useState(null);
 
-  const {register, setError, formState: {errors}, setValue, handleSubmit,control} = useForm();
-
-  const config = {
-    public_key: import.meta.env.VITE_SECURE_FLUTTER_KEY,
-    tx_ref: receiptObj.transactionId,
-    amount: receiptObj.total,
-    currency: 'NGN',
-    payment_options: 'card',
-    customer: {},
-    customizations: {
-      title: 'Business Premises Payment',
-      description: 'Business Premises Payment for Ondo State',
-      logo: 'https://st2.depositphotos.com/4403291/7418/v/450/depositphotos_74189661-stock-illustration-online-shop-log.jpg',
-    },
-  }
-
-  // Flutterwave function
-  const handleFlutterPayment = useFlutterwave(config);
+  const {register, watch, setError, formState: {errors}, setValue, handleSubmit,control} = useForm();
 
   useEffect(() => {
     // Fill Tax Profile form
@@ -92,9 +83,15 @@ const TaxForm = () => {
         setValue("busName",qTaxProfileData.busName);
         setValue("busAdd", qTaxProfileData.busAdd);
         setValue("busBranch", qTaxProfileData.busBranch);
+        setValue("nationality", qTaxProfileData.nationality);
+        setValue("busCommence", qTaxProfileData.busCommence);
+        setValue("homeAdd", qTaxProfileData.homeAdd);
+        setValue("busAdd2", qTaxProfileData.busAdd2);
+        setValue("busAdd3", qTaxProfileData.busAdd3);
+        setValue("busAdd4", qTaxProfileData.busAdd4);
       })
     } 
-    getDate();
+    getYear();
     taxProfile(currentUser);
     busDocHandler();
     readOnlyExtra.current = true;
@@ -106,92 +103,86 @@ const TaxForm = () => {
     if (location.pathname === '/app/tax' || location.pathname === '/app/tax/') {
       return navigate('/app/tax/business')
     } else if(location.pathname === '/app/tax/business' || location.pathname === '/app/tax/business/'){
-      const {busAdd, busName, busBranch, businessType, email, firstName, lastName,taxId} = data;
-      const qTaxAppEmpty = await getDocTaxAppEmpty(email);
+      const {busAdd, busName, busBranch, businessType, email, firstName, lastName,taxId, filePay, arrears, busCommence} = data;
+      
       const taxuserProfile = {firstName, lastName, email};
-      const taxBusiness = {busName, busBranch, busAdd, businessType:businessType.value, taxId};
-      const qTaxApp = await getDocTaxApp(email);
+      const taxBusiness = {busName, busBranch, busCommence, arrears, busAdd, businessType:businessType.value, taxId};
       
       const subBusTypes = await getDocBusinessType(sectorName);
       const subNameObj = Object.values(subBusTypes.subBusList);
       const subNameList = subNameObj.map(item => {return item.subBusType});
       const busTypeObj = subNameObj.filter(item => item.subBusType === businessType.value);
 
+
       try {
         // Handles first time payment
-        if (qTaxAppEmpty){
-          // Update Payment status upfront
+        if (arrears === "no"){
           // Check if business type match
           if (!subNameList.includes(businessType.value)){
            setError("businessType", {type: 'Mismatch of Business Types', message: "Mismatch of Business Types"}) 
            return
           } 
-          const newPayee = newCustomer.current;
-          const resultUuid =  uuidv4();
-          
-          // fees for receipt
-          taxFee.current = busTypeObj.map(item => item.newRegFee);
-          const total = taxFee.current * Number(busBranch);
-          const currentPaymentStatus = paymentStatus.current;
-          const taxUuid = uuidv4();
-          await docTaxApp({profile: taxuserProfile, business: taxBusiness, newPayee, paymentStatus:currentPaymentStatus, date:currentDate, appId: taxUuid});
 
-          const receiptObj = {busName, busBranch, email, date:currentDate, fees:taxFee.current, transactionId:resultUuid, total, paymentStatus:currentPaymentStatus};
-          const updatedStatus = "processing";
-          dispatch(setNewReceipt(receiptObj));
-          dispatch(setAppStatus(updatedStatus))
+          const receiptUuid =  uuidv4().substring(0,10);
+          sessionStorage.setItem("receiptId", receiptUuid)
+          const currentPaymentStatus = paymentStatus.current;
           
-        } else {
+          taxFee.current = busTypeObj.map(item => item.annualFee);
+          const certificateFee = taxFee.current * 0.2;
+          const branchTotal = taxFee.current * Number(busBranch);
+
+          const total = branchTotal + certificateFee;
+          
+          if (taxAppStatus === ""){
+            const taxUuid = uuidv4();
+            sessionStorage.setItem("taxAppId", taxUuid);
+            taxAppDocId.current = taxUuid;
+            await docTaxApp(taxUuid, {taxAppId: taxUuid,profile: taxuserProfile, business: taxBusiness, date:currentDate, paymentStatus:currentPaymentStatus, certificateFee, total, renewalFee:taxFee.current });
+            const updatedStatus = "processing";
+            dispatch(setAppStatus(updatedStatus))
+          } else if( taxAppStatus === "processing"){
+            await updateTaxApp(taxAppDocId.current,{
+              business: taxBusiness, renewalFee:taxFee.current, certificateFee, total
+            })
+          }
+          const receiptObj = {arrears, busAdd, busName, busBranch, email, date:currentDate, fees:taxFee.current, transactionId:receiptUuid, certificateFee, total, paymentStatus:currentPaymentStatus};
+          dispatch(setNewReceipt(receiptObj));
+          
+        } else if (arrears === "yes"){
           if (!subNameList.includes(businessType.value)){
             setError("businessType", {type: 'Mismatch of Business Types', message: "Mismatch of Business Types"}) 
             return
+           } 
+ 
+           const receiptUuid =  uuidv4().substring(0,10);
+           sessionStorage.setItem("receiptId", receiptUuid)
+           const currentPaymentStatus = paymentStatus.current;
+           
+           taxFee.current = busTypeObj.map(item => item.annualFee);
+           const certificateFee = taxFee.current * 0.2;
+ 
+           const total = certificateFee;
+           
+           if (taxAppStatus === ""){
+             const taxUuid = uuidv4();
+             sessionStorage.setItem("taxAppId", taxUuid);
+             taxAppDocId.current = taxUuid;
+             await docTaxApp(taxUuid, {taxAppId: taxUuid,profile: taxuserProfile, business: taxBusiness, date:currentDate, paymentStatus:currentPaymentStatus, renewalFee: taxFee.current, certificateFee, total });
+             const updatedStatus = "processing";
+             dispatch(setAppStatus(updatedStatus))
+           } else if( taxAppStatus === "processing"){
+             await updateTaxApp(taxAppDocId.current,{
+               business: taxBusiness, renewalFee: taxFee.current, certificateFee, total
+             })
            }
-          qTaxApp.docs.forEach(async (item) => {
-            const qTaxData = item.data();
-            taxAppDocId.current = item.id;
-            if ((qTaxData.paymentStatus === true )&& (qTaxData.business.businessType === businessType.value) ) {
-              if (taxAppStatus === "processing"){
-                await updateTaxApp(taxAppDocId.current,{
-                  business: taxBusiness,
-                })
-              } else if (taxAppStatus === ""){
-                const taxUuid = uuidv4();
-                await docTaxApp({profile: taxuserProfile, business: taxBusiness, newPayee:newCustomer.current, paymentStatus:paymentStatus.current, date:currentDate, appId: taxUuid});
-              } 
-              newCustomer.current = false;
-              const newPayee = newCustomer.current;
-              const resultUuid =  uuidv4();
-              
-              taxFee.current = busTypeObj.map(item => item.annualFee);
-              const total = taxFee.current * Number(busBranch);
-              const currentPaymentStatus = paymentStatus.current;
-              const receiptObj = {busName, email, busBranch, date:currentDate, fees:taxFee.current, total,  transactionId:resultUuid, paymentStatus:currentPaymentStatus};
-              dispatch(setNewReceipt(receiptObj));
-              const updatedStatus = "processing";
-              dispatch(setAppStatus(updatedStatus));
-              return;
-            }
-          })
-
-          if (taxAppStatus === "processing"){
-            taxFee.current = busTypeObj.map(item => item.newRegFee); 
-            await updateTaxApp(taxAppDocId.current,{
-              business: taxBusiness,
-            })
-          } else if (taxAppStatus === ""){
-            const taxUuid = uuidv4();
-            taxFee.current = busTypeObj.map(item => item.newRegFee);
-            await docTaxApp({profile: taxuserProfile, business: taxBusiness, newPayee:newCustomer.current, paymentStatus:paymentStatus.current, date:currentDate, appId: taxUuid});
-          } 
+           const receiptObj = {arrears, busAdd, busName, busBranch, email, date:currentDate, fees:taxFee.current, transactionId:receiptUuid, certificateFee, total, paymentStatus:currentPaymentStatus};
+           dispatch(setNewReceipt(receiptObj));
           
-          const resultUuid =  uuidv4();
-          const total = taxFee.current * Number(busBranch);
-          
-          const currentPaymentStatus = paymentStatus.current;
-          const receiptObj = {busName, email, busBranch, date:currentDate, fees:taxFee.current,total,  transactionId:resultUuid, paymentStatus:currentPaymentStatus};
-          dispatch(setNewReceipt(receiptObj));
-          const updatedStatus = "processing";
-          dispatch(setAppStatus(updatedStatus));
+           const currentPath = location.pathname;
+           // Upload file to s3 bucket on aws
+            const fileProp = filePay[0];
+            const objectName = `${busName}/${fileProp.name}`
+            await handleS3Upload(objectName, fileProp, currentPath);
         }
           
       } catch(e) {
@@ -202,33 +193,7 @@ const TaxForm = () => {
   }
 
   const onCheckoutHandler = async (data) => {
-    const {email, phoneNo, firstName, lastName} = data;
-    const fullName = firstName + " " + lastName;
-    config.customer = {email, phone_number:phoneNo, name:fullName};
-    const qUserTaxApp = await getDocTaxApp(email);
-    qUserTaxApp.docs.forEach(item => {
-      taxAppDocId.current = item.id;
-    })
-    
-    try{
-      handleFlutterPayment({
-        callback: (response) => {  
-          if (response.status === "successful"){
-            dispatch(setNewReceipt({paymentStatus:true}))
-            dispatch(setAppStatus("completed"))
-            docTaxReceipt({...receiptObj, paymentStatus:true});
-            updateTaxApp(taxAppDocId.current, {paymentStatus:true, newPayee:false});
-            return navigate('/app/success')
-          }
-          closePaymentModal();
-        }, 
-        onClose: () => {
-        } 
-      })
-    
-    } catch(e) {
-      console.log(e);
-    }
+    return navigate('/app/accountPage')
   }
 
   // Deletes tax document ID
@@ -249,7 +214,7 @@ const TaxForm = () => {
   }
 
   return (
-    <form className='taxapp-form'>
+    <form className='taxapp-form' encType="multipart/form-data">
       <div className='taxapp-main-area'>
         <div className='taxapp-headers'>
           {(location.pathname === '/app/tax' || location.pathname === '/app/tax/') ? 
@@ -268,7 +233,7 @@ const TaxForm = () => {
         </div>
         <hr />
         {(location.pathname === '/app/tax' || location.pathname === '/app/tax/') ? <ProfileInput register={register} errors={errors} readOnlyExtra={readOnlyExtra} readOnlyVal={readonlyVal} /> : 
-        ((location.pathname === '/app/tax/business' || location.pathname == '/app/tax/business/') ? <BusInput register={register} errors={errors} control={control} readOnlyVal={readonlyVal} readOnlyExtra={readOnlyExtra} /> : ((location.pathname === '/app/tax/receipt' || location.pathname === '/app/tax/receipt/') ? <Receipt /> : <></>))}
+        ((location.pathname === '/app/tax/business' || location.pathname == '/app/tax/business/') ? <BusInput register={register} errors={errors} control={control} readOnlyVal={readonlyVal} readOnlyExtra={readOnlyExtra} watch={watch} /> : ((location.pathname === '/app/tax/receipt' || location.pathname === '/app/tax/receipt/') ? <Receipt /> : <></>))}
       </div>
       <div className='button-section'>
         <AppButton onClick={handleSubmit(onCancelHandler)} name={"Cancel"} cssname={"other"} />

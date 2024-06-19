@@ -50,6 +50,13 @@ const ProfileForm = () => {
             setValue("lastName", qUserData.lastName);
             setValue("busAdd", qUserData.busAdd);
             setValue("busBranch", qUserData.busBranch);
+            setValue("busBranch", qUserData.busBranch);
+            setValue("nationality", qUserData.nationality);
+            setValue("busCommence", qUserData.busCommence);
+            setValue("homeAdd", qUserData.homeAdd);
+            setValue("busAdd2", qUserData.busAdd2);
+            setValue("busAdd3", qUserData.busAdd3);
+            setValue("busAdd4", qUserData.busAdd4);
             readOnlyVal.current = true;
             profileDocId.current = item.id
           })
@@ -78,8 +85,15 @@ const ProfileForm = () => {
         firstName: data.firstName,
         lastName: data.lastName,
         busAdd: data.busAdd,
-        busBranch: data.busBranch
+        busBranch: data.busBranch,
+        busAdd2: data.busAdd2,
+        busAdd3: data.busAdd3,
+        busAdd4: data.busAdd4,
+        nationality: data.nationality,
+        homeAdd: data.homeAdd,
+        busCommence: data.busCommence
       }
+
       const currentProfile = await getDocProfileEmpty(currentUser);
       if (currentProfile){
         docUserProfile(currentUserId, data);

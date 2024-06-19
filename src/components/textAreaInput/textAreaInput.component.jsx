@@ -1,9 +1,9 @@
 import './textAreaInput.styles.scss';
 
 
-const TextAreaInput = ({options}) => {
+const TextAreaInput = ({options, rows}) => {
   return (
-    <textarea {...options} cols="20" rows="6"></textarea>
+    <textarea {...options} rows={rows}></textarea>
   )
 }
 

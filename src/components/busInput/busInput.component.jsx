@@ -31,7 +31,9 @@ const customStyles = {
   }),
 };
 
-const BusInput = ({register, errors, control, readOnlyVal, readOnlyExtra}) => {
+const BusInput = ({register, errors, control, readOnlyVal, readOnlyExtra, watch}) => {
+  const watchArrears = watch("arrears", "no");
+  const watchBusCommence = watch("busCommence", "2023-01-01");
   // main Business list
   const busSelector = useSelector(selectBusSector);
   const busSectorList = Object.values(busSelector);
@@ -59,6 +61,17 @@ const BusInput = ({register, errors, control, readOnlyVal, readOnlyExtra}) => {
     required: "Address is required",
     maxLength: 300
   }), minLength: 5, readOnly: readOnlyExtra}
+
+  const busCommenceInput = {...register("busCommence", {
+      required: "Select Business Commencement Date",
+    }), readOnly: readOnlyExtra,
+    errorname: "busCommence",
+  }
+
+  const filePayInput = {...register("filePay", {
+    required: watchArrears === "no" ? false : "File must be uploaded",
+  }), accept: ".jpg, .jpeg, .svg, .png, .pdf, .doc, .docx"
+  }
 
 
   // Change Select Options
@@ -112,7 +125,38 @@ const BusInput = ({register, errors, control, readOnlyVal, readOnlyExtra}) => {
               {errors.businessType.message}  
             </div>}
         </div>
-        
+
+        <div className='input-container'>
+          <label htmlFor="">Business Launch Date in Ondo</label>
+          <AuthInput options={busCommenceInput} type={"date"} />
+        </div>
+        <div className='error-container'>
+            {errors.busCommence && <div>
+              {errors.busCommence.message}  
+            </div>}
+        </div>
+
+        { watchBusCommence < "2024-01-01" && <div className='input-container'>
+          <label htmlFor="">Have you made payment this year?</label>
+          <select className='arrears-select' {...register("arrears")}>
+            <option value="no">NO</option>
+            <option value="yes">YES</option>
+          </select>
+        </div>}
+        <div className='error-container'>
+            {errors.arrears && <div>
+              {errors.arrears.message}  
+            </div>}
+        </div>
+        {watchArrears==="yes" && <div className='input-container'>
+          <label htmlFor="">Upload Evidence of Payment</label>
+          <AuthInput options={filePayInput} type={"file"}/>
+        </div>}
+        <div className='error-container'>
+            {errors.filePay && <div>
+              {errors.filePay.message}  
+            </div>}
+        </div>
       </div>
       <div className='section-two'>
       <div className='input-container'>
@@ -134,7 +178,7 @@ const BusInput = ({register, errors, control, readOnlyVal, readOnlyExtra}) => {
             </div>}
         </div>
         <div className='input-container'>
-          <label htmlFor="">Business Address</label>
+          <label htmlFor="">Principal Business Address</label>
           <TextAreaInput options={busAddInput} />
         </div>
         <div className='error-container'>

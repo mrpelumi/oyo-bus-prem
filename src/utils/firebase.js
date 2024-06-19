@@ -124,9 +124,10 @@ export const docUserProfile = async (uid, profileObj) => {
 }
 
 // Add Document to taxApp
-export const docTaxApp = async (taxAppObj) => {
+export const docTaxApp = async (uid, taxAppObj) => {
   try {
-    await addDoc(collection(db, "taxApp"), taxAppObj);
+    const taxAppDocRef = doc(taxAppRef, uid);
+    await setDoc(taxAppDocRef, taxAppObj);
   } catch(e) {
     console.log(e);
   }

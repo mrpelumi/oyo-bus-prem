@@ -14,5 +14,5 @@ export const rootReducer = combineReducers({
   busSector: busSectorReducer,
   receipt: receiptReducer,
   appStatus: appStatusReducer,
-  busSectorName: busSectorNameReducer
+  busSectorName: busSectorNameReducer,
 })

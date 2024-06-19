@@ -1,0 +1,77 @@
+@use '../../variables' as v;
+
+.payUpload-main-container{
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 6rem 2rem;
+  gap: 4rem;
+  // height: 100dvh;
+  background-image: url('../../assets/account-img.svg');
+  background-size: cover;
+}
+
+.payUpload-header{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.8rem;
+  color: v.$form-text-color;
+  h3{
+    font-size: 2.5rem;
+  }
+  span{
+    font-style: italic;
+    font-size: 1.1rem;
+  }
+}
+.payUpload-form{
+  border: 1px solid;
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+  padding: 3rem;
+  gap: 1rem;
+  background-color: #fff;
+  border-radius: v.$main-border-radius;
+  border-color: rgba(79, 43, 26, 0.2);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+
+  div{
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+    color: v.$form-text-color;
+    label{
+      font-weight: 600;
+      font-size: 1.2rem;
+    }
+  }
+  .error-container{
+    div{
+      color: rgb(242, 122, 122);
+    }
+  }
+}
+
+@media screen and (max-width:768px) {
+  .payUpload-form{
+    width: 70%;
+  }
+}
+
+@media screen and (max-width:576px){
+  .payUpload-header{
+    h3{
+      font-size: 1.5rem;
+    }
+    span{
+      font-size: 0.8rem;
+    }
+  }
+  .payUpload-form{
+    width: 100%;
+  }
+}

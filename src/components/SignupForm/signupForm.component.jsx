@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import {useForm} from 'react-hook-form';
 import {z} from 'zod';
 import {zodResolver} from '@hookform/resolvers/zod';
+import { Confirm } from 'react-st-modal';
 
 import { setCurrentUser } from '../../store/user/user.reducer';
 import { useDispatch } from 'react-redux';
@@ -18,7 +19,8 @@ const schema = z.object({
   email: z.string().email({message: 'Incorrect Email address'}),
   phoneNo: z.string().min(11, {message:"Must be 11 characters or more"}),
   password: z.string().min(8, {message: 'Must be 8 characters or more'}),
-  confirmPassword: z.string()
+  confirmPassword: z.string(), 
+  terms: z.boolean().refine(value => value === true, "You must agree to the terms and conditions"),
 }).required().refine((data) => data.password === data.confirmPassword, {
   message: 'Password do not match',
   path: ['confirmPassword']
@@ -26,7 +28,7 @@ const schema = z.object({
 
 
 const SignupForm = () =>{
-  const {register, setError, handleSubmit, formState: {errors, isSubmitting}} = useForm({
+  const {register, setError, handleSubmit, formState: {errors, isSubmitting}, setValue} = useForm({
     resolver: zodResolver(schema)
   });
   const dispatch = useDispatch();
@@ -36,7 +38,7 @@ const SignupForm = () =>{
   // SignUp function with authorization
   // Email Verification still needed
   const onSubmitHandler = async (data) => {
-    const {email, phoneNo, password} = data;
+    const {email, phoneNo, password, terms} = data;
     
     // returns boolean empty value
     const phoneFromDb = await QphoneUserAuth(phoneNo);
@@ -58,7 +60,7 @@ const SignupForm = () =>{
       .then((response) => {
         dispatch(setCurrentUser(response.user.email));
         dispatch(setCurrentUserId(response.user.uid));
-        docUserAuth(response.user.uid,{email, phoneNo});
+        docUserAuth(response.user.uid,{email, phoneNo, terms});
         localStorage.setItem('Auth_Token', response._tokenResponse.refreshToken)
         navigate('/app')
       })
@@ -75,6 +77,14 @@ const SignupForm = () =>{
   const passwordInput = {...register("password"), minLength: 8}
 
   const ConfirmPasswordInput = {...register("confirmPassword",), minLength: 8}
+
+  const MoreLinkHandler = async () => {
+    const result = await Confirm("I/We hereby certify that the foregoing particulars are to the best of my/ our knowledge, information and belief correct, and I/We undertake to notify the Registrar of Business Premises whenever change occurs in or affects any of them.", "Declaration", "Agree");
+    if (result){
+      setValue("terms", true);
+    }
+    
+  }
 
   return (
     <form className='login-form-container' onSubmit={handleSubmit(onSubmitHandler)}>
@@ -119,6 +129,16 @@ const SignupForm = () =>{
           {errors.confirmPassword.message}  
         </div>}
       </div>
+      <div className='terms-container'>
+        <input className='terms-checkbox' type='checkbox' {...register("terms")} />
+        <label className='terms-label' htmlFor="">I/We hereby certify that the foregoing particulars are to the best of my/our knowledge <span className='terms-more' onClick={MoreLinkHandler}>more ...</span></label>
+      </div>
+      <div className='error-container'>
+        {errors.terms && <div>
+          {errors.terms.message}  
+        </div>}
+      </div>
+      
       <AuthButton name="SIGN UP" isSubmitting={isSubmitting} />
     </form>
   )

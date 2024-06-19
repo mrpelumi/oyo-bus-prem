@@ -1,44 +1,106 @@
 @use '../../variables' as v;
 
 .receipt-container{
-  background-color: #FAF0E6;
-  width: 70%;
+  // background-color: rgba(210, 123, 22, 0.4);
+  // background-image: url('../../assets/ondo-logo.png');
+  // background-repeat: no-repeat;
+  // background-position: center;
+  display: flex;
+  flex-direction: column;
+  width: 85%;
   margin:  1rem auto;
-  padding: 2rem;
+  padding: 1rem;
+  gap: 0.3rem;
+}
+.invoice-logo-container{
+  height: 5rem;
+  span{ 
+    display: flex;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+
+    img{
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+  }
 }
 .invoice-header{
-  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 0.4rem;
+  background-color: #FAF0E6;
   span{
     font-family: v.$azeret-font;
-    font-size: 1.5rem;
+    font-size: 1.4rem;
+    font-weight: 600;
+  }
+}
+.invoice-subheader{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  // border: 1px solid;
+  span{
+    font-family: v.$azeret-font;
+    font-size: 0.9rem;
   }
 }
 .invoice-date{
-  padding: 0.5rem;
   text-align: right;
   span{
     font-family: v.$azeret-font;
-    font-size: 1rem;
+    font-size: 0.8rem;
   }
 }
-.comp-transid{
+
+.invoice-payment-header{
   display: flex;
   flex-direction: column;
-  padding: 1rem 0;
-  gap: 0.8rem;
+  padding: 0.8rem 0;
+  gap: 1rem;
+  .payment-header{
+    text-align: center;
+    font-family: v.$azeret-font;
+    font-weight: 500;
+  }
+}
+
+.payment-container{
+  background-color: rgba(244, 243, 243, 0.7);
+  display: flex;
+  flex-direction: column;
+  padding: 0.6rem;
+}
+
+.payment-user-detail{
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
   span{
+    font-size: 0.8rem;
     font-family: v.$azeret-font;
   }
 }
 
 // Edit hr later
 
-.tax-list{
-  padding: 1rem 0;
+.payment-fees{
+  padding: 0.8rem;
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
-
+  gap: 1rem;
+  hr{
+    border: none;
+    height: 0.5px;
+    background-color: rgba(50, 49, 49, 0.2);
+    width: 100%;
+  }
   .tax-item{
     display: flex;
     flex-direction: row;
@@ -46,16 +108,37 @@
 
     span{
       font-family: v.$azeret-font;
-      font-size: 1rem;
+      font-size: 0.9rem;
+      font-weight: 400;
     }
   }
 }
 
-.tax-total{
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
+.invoice-extra{
+  text-align: center;
+  background-color: #FAF0E6;
+  padding: 0.5rem;
   span{
+    font-family: v.$azeret-font;
+  }
+}
+
+.hr-note-container{
+  hr{
+    border: none;
+    height: 0.5px;
+    background-color: rgba(50, 49, 49, 0.2);
+    width: 100%;
+  }
+}
+.receipt-query{
+  display: flex;
+  padding: 0.4rem;
+  justify-content: center;
+  align-items: center;
+  span{
+    text-align: center;
+    font-size: 0.6rem;
     font-family: v.$azeret-font;
   }
 }
@@ -66,6 +149,7 @@
   justify-content: center;
   padding: 0.5rem;
   span{
+    font-size: 0.9rem;
     font-family: v.$azeret-font;
   }
 }
