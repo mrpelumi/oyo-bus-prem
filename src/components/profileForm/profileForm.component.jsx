@@ -58,7 +58,8 @@ const ProfileForm = () => {
             setValue("busAdd3", qUserData.busAdd3);
             setValue("busAdd4", qUserData.busAdd4);
             readOnlyVal.current = true;
-            profileDocId.current = item.id
+            profileDocId.current = item.id;
+            sessionStorage.setItem("firstName", qUserData.firstName);
           })
         }
 

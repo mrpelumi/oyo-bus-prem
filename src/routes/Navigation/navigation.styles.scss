@@ -72,6 +72,11 @@
 .nav-profile{
   height: 100%;
   padding: 0.5rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
   .nav-profile-icon{
     height: 2.3rem;
     width: 2.3rem;
@@ -158,6 +163,9 @@
     .menu-profile{
       height: 100%;
       padding: 0.5rem;
+      display: flex;
+      flex-direction: row;
+      gap: 0.5rem;
       .menu-profile-icon{
         height: 1.6rem;
         width: 1.6rem;

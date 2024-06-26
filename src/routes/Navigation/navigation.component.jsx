@@ -20,10 +20,12 @@ const Navigation = () => {
   const dispatch = useDispatch();
   const [isOpen, setIsOpen] = useState(false);
   const currentUserEmail = useRef("");
+  const [currentFirstName, setCurrentFirstName] = useState("");
 
   useEffect(() => {
     authToken.current = localStorage.getItem('Auth_Token');
     currentUserEmail.current = sessionStorage.getItem("userEmail");
+    setCurrentFirstName(sessionStorage.getItem("firstName"));
     if (authToken.current){
       navigate('/app')
     } else {
@@ -80,8 +82,7 @@ const Navigation = () => {
           
           <div className='nav-profile'>
             <Link><FontAwesomeIcon icon={faCircleUser} className='nav-profile-icon' /></Link>
-            {/* Add name */}
-            {/* <span>{mainUser}</span> */}
+            <span>{currentFirstName}</span>
           </div>
         </div>
 
@@ -99,7 +100,7 @@ const Navigation = () => {
             ((currentPath === '/app') || (currentPath === '/app/')) ? (
               <div className='menu-action-item'>
               <span><Link to={'/app/tax'} onClick={startAppHandler} className={'menu-action-link'}>Start Application</Link></span>
-              <span><Link to={'/app/admin/approval'} className={'menu-action-link'}>Admin Approval</Link></span>
+              { currentUserEmail.current === "buvencommunicationsltd@gmail.com" && <span><Link to={'/app/admin/approval'} className={'nav-action-link'}>Admin Approval</Link></span>}
               <span><Link className={'menu-action-link'} onClick={SignOutHandler}>Log Out</Link></span>
             </div>) : (
               <div className='menu-action-item single-nav-link'>
@@ -110,8 +111,7 @@ const Navigation = () => {
           
           <div className='menu-profile'>
             <Link><FontAwesomeIcon icon={faCircleUser} className='menu-profile-icon' /></Link>
-            {/* Add name */}
-            {/* <span>{mainUser}</span> */}
+            <span>{currentFirstName}</span>
           </div>
             </div>
           ) : null
