@@ -4,16 +4,22 @@ import { useSelector } from 'react-redux';
 import { selectReceipt } from '../../store/receipt/receipt.selector';
 import AppButton from '../../components/AppButton/appButton.component';
 import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
 
 
 const AccountPage = () => {
   const navigate = useNavigate();
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const receiptObj = useSelector(selectReceipt);
   const {total} = receiptObj;
 
 
   const onSubmitHandler = () => {
+    setIsSubmitting(true);
+    setTimeout(() => {
+      setIsSubmitting(false);
+    }, 1000)
     navigate('/app/payUploadPage');
   }
 
@@ -42,7 +48,7 @@ const AccountPage = () => {
         </div>
       </div>
       <div>
-      <AppButton onClick={onSubmitHandler} name={"Next"} cssname={"other"} />
+      <AppButton onClick={onSubmitHandler} name={"Next"} cssname={"other"} isSubmitting={isSubmitting} />
       </div>
     </div>
   )

@@ -60,6 +60,7 @@ const TaxForm = () => {
 
   const [currentYear, setCurrentYear] = useState(getYear());
   const [currentDate, setCurrentDate] = useState(getToday());
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [uuidVal, setUuidVal] = useState(null);
 
   const {register, watch, setError, formState: {errors}, setValue, handleSubmit,control} = useForm();
@@ -101,8 +102,13 @@ const TaxForm = () => {
 
   const onNextHandler =  async (data) => {
     if (location.pathname === '/app/tax' || location.pathname === '/app/tax/') {
+      setIsSubmitting(true);
+      setTimeout(() => {
+        setIsSubmitting(false);
+      }, 1000)
       return navigate('/app/tax/business')
     } else if(location.pathname === '/app/tax/business' || location.pathname === '/app/tax/business/'){
+      setIsSubmitting(true);
       const {busAdd, busName, busBranch, businessType, email, firstName, lastName,taxId, filePay, arrears, busCommence} = data;
       
       const taxuserProfile = {firstName, lastName, email};
@@ -134,7 +140,7 @@ const TaxForm = () => {
           const total = branchTotal + certificateFee;
           
           if (taxAppStatus === ""){
-            const taxUuid = uuidv4();
+            const taxUuid = uuidv4().substring(0,10);
             sessionStorage.setItem("taxAppId", taxUuid);
             taxAppDocId.current = taxUuid;
             await docTaxApp(taxUuid, {taxAppId: taxUuid,profile: taxuserProfile, business: taxBusiness, date:currentDate, paymentStatus:currentPaymentStatus, certificateFee, total, renewalFee:taxFee.current });
@@ -162,9 +168,8 @@ const TaxForm = () => {
            const certificateFee = taxFee.current * 0.2;
  
            const total = certificateFee;
-           
            if (taxAppStatus === ""){
-             const taxUuid = uuidv4();
+             const taxUuid = uuidv4().substring(0,10);
              sessionStorage.setItem("taxAppId", taxUuid);
              taxAppDocId.current = taxUuid;
              await docTaxApp(taxUuid, {taxAppId: taxUuid,profile: taxuserProfile, business: taxBusiness, date:currentDate, paymentStatus:currentPaymentStatus, renewalFee: taxFee.current, certificateFee, total });
@@ -182,17 +187,25 @@ const TaxForm = () => {
            // Upload file to s3 bucket on aws
             const fileProp = filePay[0];
             const objectName = `${busName}/${fileProp.name}`
+            sessionStorage.setItem("ArrearsFile", fileProp.name);
             await handleS3Upload(objectName, fileProp, currentPath);
         }
           
       } catch(e) {
         console.log(e);
       }
+      setTimeout(() => {
+        setIsSubmitting(false);
+      }, 1000)
       return navigate('/app/tax/receipt')
     }
   }
 
   const onCheckoutHandler = async (data) => {
+    setIsSubmitting(true);
+    setTimeout(() => {
+      setIsSubmitting(false);
+    }, 1000)
     return navigate('/app/accountPage')
   }
 
@@ -242,7 +255,7 @@ const TaxForm = () => {
             <AppButton onClick={handleSubmit(onCheckoutHandler)} name={"Checkout"} cssname={"save"} />
           </>
         ): <>
-          <AppButton onClick={handleSubmit(onNextHandler)}  name={"Next"} cssname={"save"} />
+          <AppButton onClick={handleSubmit(onNextHandler)}  name={"Next"} cssname={"save"} isSubmitting={isSubmitting} />
         </>}
         
       </div>

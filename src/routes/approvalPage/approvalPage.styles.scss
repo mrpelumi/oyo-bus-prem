@@ -1,0 +1,83 @@
+@use '../../variables' as v;
+.main-approval-container{
+  display: flex;
+  flex-direction: column;
+  padding: 4.2rem 1rem;
+  justify-content: center;
+  align-items: center;
+  background-image: url('../../assets/account-img.svg');
+  background-size: cover;
+  gap: 1.2rem;
+}
+
+.approval-header{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.9rem;
+  padding: 0.9rem;
+  h3{
+    font-size: 2.5rem;
+    color: v.$form-text-color;
+  }
+  span{
+    font-style: italic;
+    font-size: 1.1rem;
+    color: v.$form-text-color;
+  }
+}
+
+.main-approval-form{
+  display: flex;
+  flex-direction: column;
+  border: 1px solid;
+  width: 60%;
+  align-items: center;
+  padding: 2rem 0;
+  gap: 0.8rem;
+  background-color: #fff;
+  border-radius: v.$main-border-radius;
+  border-color: rgba(79, 43, 26, 0.2);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+
+  .error-container{
+    div{
+      color: rgb(242, 122, 122);
+    }
+  }
+}
+.approval-input{
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  width: 60%;
+
+  label{
+    color: v.$form-text-color;
+    font-weight: 600;
+    font-size: 1.1rem;
+  }
+}
+.payment-label{
+  color: v.$form-text-color;
+  font-size: 1.4rem;
+}
+.approval-button-section{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  width: 30%;
+}
+
+@media screen and (max-width:768px) {
+  .main-approval-form{
+    width: 100%;
+  }  
+  .payment-label{
+    font-size: 1rem;
+  }
+  .approval-button-section{
+    width: 50%;
+    gap: 0.5rem;
+  }
+}

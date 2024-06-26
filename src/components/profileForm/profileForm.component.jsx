@@ -93,7 +93,6 @@ const ProfileForm = () => {
         homeAdd: data.homeAdd,
         busCommence: data.busCommence
       }
-
       const currentProfile = await getDocProfileEmpty(currentUser);
       if (currentProfile){
         docUserProfile(currentUserId, data);

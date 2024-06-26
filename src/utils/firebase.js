@@ -30,6 +30,9 @@ const userProfileRef = collection(db, "userProfile");
 // Tax App document object state
 const taxAppRef = collection(db, "taxApp");
 
+// Receipt document object state
+const receiptRef = collection(db, "receipt");
+
 export const QphoneUserAuth = async (phoneNo) => {
 
   const q = query(userAuthRef, where("phoneNo", "==", phoneNo))
@@ -103,6 +106,14 @@ export const getDocTaxAppEmpty = async (email) => {
   return querySnapshot.empty;
 }
 
+// Get Document from receipt
+export const getDocReceipt = async (email, taxAppId) => {
+  const q = query(receiptRef,where("email", "==", email), where ("taxAppId", "==", taxAppId));
+
+  const querySnapshot = await getDocs(q);
+  return querySnapshot;
+}
+
 // Add document to userAuth
 export const docUserAuth = async (uid, userObj) => {
   try {
@@ -159,6 +170,15 @@ export const updateTaxApp = async (docId, taxObj) => {
     const taxAppRef = doc(db, "taxApp", docId);
     await updateDoc(taxAppRef, taxObj);
   } catch(e){
+    console.log(e);
+  }
+}
+
+export const updateReceipt = async (docId, receiptObj) => {
+  try {
+    const receiptRef = doc(db, "receipt", docId);
+    await updateDoc(receiptRef, receiptObj);
+  } catch (e) {
     console.log(e);
   }
 }

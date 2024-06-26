@@ -11,18 +11,14 @@ import { sendAuthPasswordResetEmail } from '../../utils/firebase';
 const ForgotPassword = () =>{
   const navigate = useNavigate();
 
-
   const {register, handleSubmit, formState: {errors}} = useForm();
   const ForgotPasswordHandler = async (data) => {
     const emailValue = data.email;
     try{
       await sendAuthPasswordResetEmail(emailValue)
       .then((response) => {
-        Alert("Password reset link sent to email", "Password Reset");
-        setTimeout(() => {
-          navigate("/");
-        }, 2000)
-        
+        Alert("Password reset link sent to email", "Password Reset")
+        .then(response => navigate("/"))
       })
     } catch(e) {
       console.log(e)
@@ -36,16 +32,16 @@ const ForgotPassword = () =>{
     <div className='forgot-password-container'>
       <h1>Forgot Password</h1>
       <div className='form-container'>
-      <div className='error-container'>
-            {errors.email && <div>
-              {errors.email.message}  
-            </div>}
-        </div>
         <span>
           Enter your email address
         </span>
         <form className='forgot-password-form' onSubmit={handleSubmit(ForgotPasswordHandler)}>
           <AuthInput type='email' options={ForgotPasswordInput} />
+          <div className='error-container'>
+            {errors.email && <div>
+              {errors.email.message}  
+            </div>}
+          </div>
           <AppButton name={"Reset"} cssname={"other"} />
         </form>
       </div>

@@ -136,7 +136,7 @@ const BusInput = ({register, errors, control, readOnlyVal, readOnlyExtra, watch}
             </div>}
         </div>
 
-        { watchBusCommence < "2024-01-01" && <div className='input-container'>
+        { watchBusCommence && <div className='input-container'>
           <label htmlFor="">Have you made payment this year?</label>
           <select className='arrears-select' {...register("arrears")}>
             <option value="no">NO</option>

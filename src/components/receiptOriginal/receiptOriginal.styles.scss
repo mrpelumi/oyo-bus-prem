@@ -1,0 +1,66 @@
+@use '../../variables' as v;
+
+@page{
+  size: A4;
+}
+
+.original-main-container{
+  background-image: url('../../assets/e-receipt.jpg');
+  background-position: left top;
+  background-repeat: no-repeat;
+  background-size: contain;
+  padding: 1rem;
+  width: 53.1rem;
+  height: 37rem;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.original-header-container{
+  padding: 3.5rem;
+}
+.original-date-container{
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  gap: 0.9rem;
+
+  span{
+    font-size: 1.2rem;
+  }
+}
+.original-transaction-container{
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+
+  .transaction-item{
+    display: flex;
+    flex-direction: row;
+    gap: 0.6rem;
+    font-size: 1.2rem;
+  }
+}
+.original-list-container{
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+  padding-left: 2rem;
+  width: 100%;
+  hr{
+    border: none;
+    height: 0.5px;
+    background-color: rgba(50, 49, 49, 0.7);
+    width: 100%;
+  }
+}
+.original-item-container{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  span{
+    font-size: 1.2rem;
+    font-weight: 600;
+  }
+}

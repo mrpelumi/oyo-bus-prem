@@ -5,11 +5,9 @@ import {selectReceipt} from '../../store/receipt/receipt.selector';
 import ondoLogo from '../../assets/ondo-logo.png';
 import { forwardRef } from 'react';
 
-
 const Receipt = forwardRef((props, ref) => {
   const receiptObj = useSelector(selectReceipt);
   const {arrears, busName, busBranch, date, fees, total, transactionId, certificateFee, busAdd} = receiptObj;
-
 
   return (
     <>

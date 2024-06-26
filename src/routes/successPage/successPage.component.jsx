@@ -1,17 +1,45 @@
 import './successPage.styles.scss';
-import {Link} from 'react-router-dom';
+import {Link, useParams} from 'react-router-dom';
 import { Alert } from 'react-st-modal';
-import { useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import {useReactToPrint} from "react-to-print";
+import { Buffer } from 'buffer';
 
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import { faSquareCheck } from '@fortawesome/free-solid-svg-icons';
 import { faCertificate } from '@fortawesome/free-solid-svg-icons';
-import Receipt from '../../components/receipt/receipt.component';
+import ReceiptOriginal from '../../components/receiptOriginal/receiptOriginal.component';
+import { getDocReceipt } from '../../utils/firebase';
 
 
 const SuccessPage = () => {
   const componentRef = useRef();
+  const {userEmail, taxAppId} = useParams();
+  const [receiptValues, setReceiptValues] = useState({});
+
+  // Create a buffer from the string
+  useEffect(() => {
+    const userEmailObj = Buffer.from(userEmail, "base64");
+    const taxAppIdObj = Buffer.from(taxAppId, "base64");
+
+
+    // Encode the Buffer as a utf8 string
+    const decodedUserEmail = userEmailObj.toString("utf8");
+    const decodedTaxAppId = taxAppIdObj.toString("utf8");
+
+
+    const getDocReceiptHandler = async() => {
+      const response =  await getDocReceipt(decodedUserEmail, decodedTaxAppId);
+      response.docs.forEach(item => {
+        setReceiptValues(item.data())
+    });
+    }
+
+    getDocReceiptHandler();
+  }, [])
+  
+
+
   const onPrintHandler = useReactToPrint({
     content: () => componentRef.current
   })
@@ -33,7 +61,7 @@ const SuccessPage = () => {
         <span>The payment has been successful and completed</span>
       </div>
       <div className='receipt-component'>
-        <Receipt ref={componentRef} />
+        <ReceiptOriginal ref={componentRef} receiptValues={receiptValues} />
       </div>
       
       <div className='certificate-text'>
@@ -47,7 +75,7 @@ const SuccessPage = () => {
         <button onClick={onCertificateHandler}>Certificate</button>
       </div>
       <div className='home-link-container'>
-        <Link to={'/app/tax'} className={'home-link-txt'}>Go to Home</Link>
+        <Link to={'/'} className={'home-link-txt'}>Go to Login</Link>
       </div>
     </div>
   )
