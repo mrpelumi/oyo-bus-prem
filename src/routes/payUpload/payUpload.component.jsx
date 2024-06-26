@@ -56,10 +56,12 @@ const PayUploadPage = () => {
      const {fileReceipt} = data;
      const fileObj = fileReceipt[0];
 
-     const objectName = `${busName}/${fileObj.name}`
+     const fileObjName = fileObj.name.replaceAll(" ", "+")
+
+     const objectName = `${busName}/${fileObjName}`
      await handleS3Upload(objectName, fileObj, currentPath);
 
-    const paymentObjUrl = `${base_url}/businessreceipt.cloud/${urlBusName}/${fileObj.name}`
+    const paymentObjUrl = `${base_url}/businessreceipt.cloud/${urlBusName}/${fileObjName}`
 
     // send an email with file links
     const templateParams = {
