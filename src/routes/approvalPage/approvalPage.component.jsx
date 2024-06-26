@@ -41,7 +41,7 @@ const ApprovalPage = () => {
       to_name: `${data.businessName}`,
       to_email: `${data.approvalEmail}`,
       message: `Your payment has been Approved by Buven Communications Ltd.
-                Your tax app ID is ${data.taxAppId}. 
+                Your tax app ID is ${data.taxAppId}
                 Kindly, click on the link http://www.ondobusinesspremises.com/app/success/${base64Email}/${base64TaxApp}
                 To print your receipt and certificate.`
     }

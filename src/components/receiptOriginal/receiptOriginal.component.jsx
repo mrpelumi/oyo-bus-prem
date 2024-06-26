@@ -25,12 +25,12 @@ const ReceiptOriginal = forwardRef((props, ref) => {
         </div>
       </div>
       <div className='original-list-container'>
-        <hr />
+        {receiptObj.arrears === "no" && <hr />}
         {receiptObj.arrears === "no" && <div className='original-item-container'>
           <span>Annual Fee</span>
           <span>NGN {receiptObj.fees[0]}</span>
         </div>}
-        <hr />
+        {receiptObj.arrears === "no" && <hr />}
         {receiptObj.arrears === "no" && <div className='original-item-container'>
           <span>Number of Branches</span>
           <span>{receiptObj.busBranch}</span>
