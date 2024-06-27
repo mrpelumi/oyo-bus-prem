@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import './App.scss';
 import {Routes, Route} from 'react-router-dom';
 import { useEffect } from 'react';
@@ -17,6 +18,7 @@ import AccountPage  from './routes/accountPage/accountPage';
 import PayUploadPage from './routes/payUpload/payUpload.component';
 import ApprovalPage from './routes/approvalPage/approvalPage.component';
 import ReceiptOriginal from './components/receiptOriginal/receiptOriginal.component';
+import TaxAppHistory from './routes/taxAppHistory/taxAppHistory.component';
 
 function App() {
 
@@ -40,6 +42,7 @@ function App() {
       <Route path='/app' element={<Navigation />}>
         <Route index element={<Profile />} />
         <Route path='/app/admin/approval' element={<ApprovalPage />} />
+        <Route path='/app/history' element={<TaxAppHistory />} />
         <Route path='/app/tax' element={<TaxApp />}>
           <Route index element={<TaxForm />} />
           <Route path='/app/tax/business' element={<TaxForm />} />
