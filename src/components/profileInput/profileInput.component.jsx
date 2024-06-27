@@ -69,7 +69,7 @@ const ProfileInput = ({register, errors, readOnlyVal=false, readOnlyExtra=false}
     busNameInput: {...register("busName", {
       required: "Enter business name",
       maxLength: 255
-    }), minLength: 3, readOnly: readOnlyVal},
+    }), minLength: 3, readOnly: readOnlyExtra},
     errorName: "busName",
     type:"text"
   },

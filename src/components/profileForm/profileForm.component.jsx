@@ -41,27 +41,35 @@ const ProfileForm = () => {
         const qUserProfileEmpty = await getDocProfileEmpty(email);
       
         if (!qUserProfileEmpty){
-          
+          if (email !== "buvencommunicationsltd@gmail.com"){
+            const qUserProfile = await getDocProfile(email);
+            qUserProfile.docs.forEach((item) => {
+              const qUserData = item.data();
+              setValue("busName", qUserData.busName);
+              setValue("firstName", qUserData.firstName);
+              setValue("lastName", qUserData.lastName);
+              setValue("busAdd", qUserData.busAdd);
+              setValue("busBranch", qUserData.busBranch);
+              setValue("busBranch", qUserData.busBranch);
+              setValue("nationality", qUserData.nationality);
+              setValue("busCommence", qUserData.busCommence);
+              setValue("homeAdd", qUserData.homeAdd);
+              setValue("busAdd2", qUserData.busAdd2);
+              setValue("busAdd3", qUserData.busAdd3);
+              setValue("busAdd4", qUserData.busAdd4);
+              readOnlyVal.current = true;
+              profileDocId.current = item.id;
+              sessionStorage.setItem("firstName", qUserData.firstName);
+            }) 
+        } else {
           const qUserProfile = await getDocProfile(email);
           qUserProfile.docs.forEach((item) => {
             const qUserData = item.data();
-            setValue("busName", qUserData.busName);
-            setValue("firstName", qUserData.firstName);
-            setValue("lastName", qUserData.lastName);
-            setValue("busAdd", qUserData.busAdd);
-            setValue("busBranch", qUserData.busBranch);
-            setValue("busBranch", qUserData.busBranch);
-            setValue("nationality", qUserData.nationality);
-            setValue("busCommence", qUserData.busCommence);
-            setValue("homeAdd", qUserData.homeAdd);
-            setValue("busAdd2", qUserData.busAdd2);
-            setValue("busAdd3", qUserData.busAdd3);
-            setValue("busAdd4", qUserData.busAdd4);
-            readOnlyVal.current = true;
             profileDocId.current = item.id;
             sessionStorage.setItem("firstName", qUserData.firstName);
-          })
+          }) 
         }
+      }
 
         qUserAuth.then((response) => {
           response.forEach((doc) => {
@@ -85,6 +93,7 @@ const ProfileForm = () => {
       const updateData = {
         firstName: data.firstName,
         lastName: data.lastName,
+        busName: data.busName,
         busAdd: data.busAdd,
         busBranch: data.busBranch,
         busAdd2: data.busAdd2,
@@ -115,10 +124,17 @@ const ProfileForm = () => {
   // reset input fields
   const onResetHandler = () => {
     reset({
-      firstName:"",
-      lastName:"",
-      busAdd:""
-    });
+      firstName: "",
+      lastName: "",
+      busAdd: "",
+      busAdd2: "",
+      busAdd3: "",
+      busAdd4: "",
+      busBranch: "",
+      busName: "",
+      homeAdd: "",
+      nationality: "",
+    })
   }
 
   return (
@@ -138,4 +154,3 @@ const ProfileForm = () => {
 }
 
 export default ProfileForm;
-

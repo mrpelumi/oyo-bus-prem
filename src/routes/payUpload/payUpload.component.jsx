@@ -13,8 +13,9 @@ import emailjs from "@emailjs/browser";
 import { selectReceipt } from '../../store/receipt/receipt.selector';
 import { setAppStatus } from '../../store/appStatus/appStatus.reducer';
 
-import { docTaxReceipt } from '../../utils/firebase';
+import { docTaxReceipt, updateTaxApp } from '../../utils/firebase';
 import { Alert } from 'react-st-modal';
+import { Buffer } from 'buffer';
 
 const PayUploadPage = () => {
   const {register, handleSubmit, formState: {errors}} = useForm();
@@ -62,30 +63,47 @@ const PayUploadPage = () => {
      await handleS3Upload(objectName, fileObj, currentPath);
 
     const paymentObjUrl = `${base_url}/businessreceipt.cloud/${urlBusName}/${fileObjName}`
+    
 
-    // send an email with file links
-    const templateParams = {
-      from_name: "Business Premises Db",
-      bus_name: busName,
-      to_name: "Admin",
-      to_email: "buvencommunicationsltd@gmail.com",
-      message: `Kindly, verify the payment of ${busName}.
-                The email of the Client is ${email}. The tax appID is ${currentTaxId}.
-                The business name of the client is ${busName}.
-                The previous annual payment proof is ${arrearsObjUrl.current}.
-                The current payment proof is ${paymentObjUrl}`
-    }
+    // bypass for admin
+    if (email === "buvencommunicationsltd@gmail.com"){
+      // Create buffer object, specifying utf8 as encoding
+      const emailEncode = Buffer.from(email, "utf8");
+      const taxAppIdEncode = Buffer.from(currentTaxId, "utf-8");
 
-    await emailjs.send(serviceId, templateId, templateParams, publicKey);
-    docTaxReceipt({...receiptObj, paymentStatus: false, taxAppId: currentTaxId});
+      // Encode the Buffer as a base64 string
+      const base64Email = emailEncode.toString("base64");
+      const base64TaxApp = taxAppIdEncode.toString("base64");
 
-    setTimeout(() => {
-      setIsSubmitting(false);
-    }, 1000);
-    dispatch(setAppStatus("completed"));
-    Alert("Kindly, await the approval for your payments.", "Await Approval")
-    .then(response => navigate('/app'));
+      docTaxReceipt({...receiptObj, paymentStatus: true, taxAppId: currentTaxId});
+      await updateTaxApp(currentTaxId, {paymentStatus: true});
+      dispatch(setAppStatus("completed"));
+      navigate(`/app/success/${base64Email}/${base64TaxApp}`)
+    } else{
+      // send an email with file links
+      const templateParams = {
+        from_name: "Business Premises Db",
+        bus_name: busName,
+        to_name: "Admin",
+        to_email: "buvencommunicationsltd@gmail.com",
+        message: `Kindly, verify the payment of ${busName}.
+                  The email of the Client is ${email}. The tax appID is ${currentTaxId}
+                  The business name of the client is ${busName}.
+                  The previous annual payment proof is ${arrearsObjUrl.current}.
+                  The current payment proof is ${paymentObjUrl}`
+      }
+
+      await emailjs.send(serviceId, templateId, templateParams, publicKey);
+      docTaxReceipt({...receiptObj, paymentStatus: false, taxAppId: currentTaxId});
+
+      setTimeout(() => {
+        setIsSubmitting(false);
+      }, 1000);
+      dispatch(setAppStatus("completed"));
+      Alert("Kindly, await the approval for your payments.", "Await Approval")
+      .then(response => navigate('/app'));
   }
+}
 
   return (
     <div className='payUpload-main-container'>
