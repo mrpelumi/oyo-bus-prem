@@ -89,7 +89,8 @@ const PayUploadPage = () => {
       docTaxReceipt({...receiptObj, paymentStatus: true, taxAppId: currentTaxId});
       
       // Document Certificate
-      docCertificate(certificateNum.current,{email, taxAppId:currentTaxId, busName, createdAt:serverTimestamp(), certificateNo: certificateNum.current})
+      docCertificate(certificateNum.current,{email, taxAppId:currentTaxId, busName, createdAt:serverTimestamp(), certificateNo: certificateNum.current});
+      
       await updateTaxApp(currentTaxId, {paymentStatus: true});
       dispatch(setAppStatus("completed"));
       navigate(`/app/success/${base64Email}/${base64TaxApp}`);

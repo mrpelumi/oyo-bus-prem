@@ -19,19 +19,13 @@ const ProfileInput = ({register, errors, readOnlyVal=false, readOnlyExtra=false}
  const ProfileInputList = [
   {
     name: "First Name",
-    optionInput: {...register("firstName", {
-      required:"First Name is required",
-      maxLength:255
-      }), minLength: 1, readOnly:readOnlyExtra
+    optionInput: {...register("firstName"), minLength: 1, readOnly:readOnlyExtra
     },
     errorName: "firstName" 
   },
   {
     name: "Last Name",
-    optionInput: {...register("lastName", {
-      required:"Last Name is required",
-      maxLength:255
-      }), minLength: 1, readOnly:readOnlyExtra
+    optionInput: {...register("lastName"), minLength: 1, readOnly:readOnlyExtra
     },
     errorName: "lastName" 
   },

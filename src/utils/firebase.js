@@ -126,7 +126,7 @@ export const getDocSingleCertificate= async (email, taxAppId) => {
 
 // Get Document from certificate
 export const getDocCertificate = async () => {
-  const q = query(certificateRef, orderBy("timestamp", "desc"), limit(1));
+  const q = query(certificateRef, orderBy("createdAt", "desc"), limit(1));
 
   const querySnapshot = await getDocs(q);
   return querySnapshot;
