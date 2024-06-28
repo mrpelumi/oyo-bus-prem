@@ -9,45 +9,47 @@
   background-position: left top;
   background-repeat: no-repeat;
   background-size: contain;
-  padding: 1rem;
-  width: 53.1rem;
-  height: 37rem;
+  width: 135rem;
+  height: 74.2rem;
   margin: auto;
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 1.5rem;
 }
 .original-header-container{
-  padding: 3.5rem;
+  padding: 7.5rem;
 }
 .original-date-container{
   display: flex;
   flex-direction: row;
   justify-content: flex-end;
   gap: 0.9rem;
+  width: 76%;
 
   span{
-    font-size: 1.2rem;
+    font-size: 3rem;
   }
 }
 .original-transaction-container{
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+  width: 76%;
+  padding-left: 2rem;
 
   .transaction-item{
     display: flex;
     flex-direction: row;
     gap: 0.6rem;
-    font-size: 1.2rem;
+    font-size: 2.7rem;
   }
 }
 .original-list-container{
   display: flex;
   flex-direction: column;
-  gap: 0.9rem;
+  gap: 1.5rem;
   padding-left: 2rem;
-  width: 100%;
+  width: 76%;
   hr{
     border: none;
     height: 0.5px;
@@ -59,8 +61,15 @@
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  gap: 0.5rem;
   span{
-    font-size: 1.2rem;
+    font-size: 2.7rem;
     font-weight: 600;
+  }
+}
+
+@media print{
+  @page {
+    size: landscape;
   }
 }

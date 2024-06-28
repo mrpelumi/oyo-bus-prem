@@ -29,7 +29,7 @@ const Receipt = forwardRef((props, ref) => {
         <span className='payment-header'>Payment Details</span>
         <div className='payment-user-detail'>
             <span>Received From: {busName}</span>
-            <span>Transaction ID: {transactionId ? transactionId.substr(0, 10) : null}</span>
+            <span>Transaction ID: {transactionId ? transactionId.substring(0, 10) : null}</span>
             <span>Address: {busAdd}</span>
           </div>
         <div className='payment-container'>

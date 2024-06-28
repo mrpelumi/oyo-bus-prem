@@ -9,8 +9,8 @@
   background-position: left top;
   background-repeat: no-repeat;
   background-size: contain;
-  width: 52.5rem;
-  height: 37rem;
+  width: 130rem;
+  height: 74.2rem;
   margin: auto;
   display: flex;
   flex-direction: column;
@@ -18,26 +18,35 @@
 }
 
 .certificate-header{
-  height: 13rem;
+  height: 27rem;
 }
 .certificate-busname{
-  height: 6rem;
+  height: 10rem;
   display: flex;
   flex-direction: row;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
+  padding-left: 16rem;
   span{
-    font-size: 4rem;
+    width: 70%;
+    text-align: center;
+    font-size: 6rem;
     font-weight: 600;
   }
 }
 .certificate-number{
-  height: 15rem;
+  height: 30rem;
   display: flex;
   align-items: flex-end;
-  padding-left: 13rem;
-  padding-bottom: 1.2rem;
+  padding-left: 27rem;
+  padding-bottom: 1.4rem;
   span{
-    font-size: 1.5rem;
+    font-size: 2.5rem;
+  }
+}
+
+@media print{
+  @page {
+    size: landscape;
   }
 }

@@ -12,7 +12,7 @@ const Certificate = forwardRef((props, ref) => {
         <span></span>
       </div>
       <div className='certificate-busname'>
-        <span>{businessName ? businessName.substr(0,20):null}</span>
+        <span>{businessName ? businessName.substring(0,25):null}</span>
       </div>
       <div className='certificate-number'>
         <span>{certObj.certificateNo}</span>
