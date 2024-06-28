@@ -10,7 +10,7 @@ const Certificate = forwardRef((props, ref) => {
   const options = {
     weekday: "long",
     year: "numeric",
-    month: "short",
+    month: "long",
     day: "numeric"
   };
   const certTime = timestampNo ? timestampNo.toDate().toLocaleDateString("en-US", options) : null;
