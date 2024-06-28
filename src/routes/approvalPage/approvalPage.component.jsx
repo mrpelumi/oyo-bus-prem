@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import emailjs from '@emailjs/browser';
 import { Buffer } from 'buffer';
 
-import { updateTaxApp, getDocReceipt, updateReceipt } from '../../utils/firebase';
+import { updateTaxApp, getDocReceipt, updateReceipt, getDocCertificate, docCertificate } from '../../utils/firebase';
 import { useRef, useState } from 'react';
 
 const ApprovalPage = () => {
@@ -17,6 +17,7 @@ const ApprovalPage = () => {
   const receiptDocId = useRef("");
   const [isSubmittingYes, setIsSubmittingYes] = useState(false);
   const [isSubmittingNo, setIsSubmittingNo] = useState(false);
+  const certificateNum = useRef();
 
   // email address to be changed
   const serviceId = import.meta.env.VITE_EMAILJS_SERVICE_ID;
@@ -28,10 +29,19 @@ const ApprovalPage = () => {
     setIsSubmittingYes(true);
     const approvalEmailObj = Buffer.from(data.approvalEmail, "utf8");
     const taxAppIdObj = Buffer.from(data.taxAppId, "utf-8");
+    const currentTimeStamp = new Date(); 
 
     // Encode the Buffer as a base64 string
     const base64Email = approvalEmailObj.toString("base64");
     const base64TaxApp = taxAppIdObj.toString("base64");
+
+    const responseCert = await getDocCertificate();
+    responseCert.docs.forEach(item => {
+      const {certificateNo} = item.data();
+      const onlyCertNoStr = certificateNo.match(/(\d+)/);
+      const onlyCertNo = Number(onlyCertNoStr[0]) + 1;
+      certificateNum.current = `BP${onlyCertNo}`;
+    });
 
     const message = `Payment is Approved for ${data.approvalEmail}`;
     const templateParams = {
@@ -53,11 +63,14 @@ const ApprovalPage = () => {
     response.docs.forEach(item => {
       receiptDocId.current = item.id;
     });
-
     await updateReceipt(receiptDocId.current, {paymentStatus: true});
+    
+    // Document Certificate 
+    docCertificate(certificateNum.current,{email:data.approvalEmail, taxAppId:data.taxAppId, busName:data.businessName, timestamp:currentTimeStamp, certificateNo: certificateNum.current});
+
     setTimeout(() => {
       setIsSubmittingYes(false);
-    }, 1000)
+    }, 1000);
     Alert(message, "Payment Alert")
     .then((response) => navigate('/app'))
   }

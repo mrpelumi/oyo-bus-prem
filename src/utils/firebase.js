@@ -1,7 +1,7 @@
 import { initializeApp } from "firebase/app";
 import { getAuth, createUserWithEmailAndPassword, onAuthStateChanged,
 signInWithEmailAndPassword, sendPasswordResetEmail ,setPersistence, browserSessionPersistence, signOut } from "firebase/auth";
-import {getFirestore, collection, addDoc, query, where, getDocs, updateDoc, doc, getDoc, setDoc} from "firebase/firestore";
+import {getFirestore, collection, addDoc, query, where, getDocs, updateDoc, doc, getDoc, setDoc, orderBy, limit} from "firebase/firestore";
 
 // Your web app's Firebase configuration
 
@@ -32,6 +32,8 @@ const taxAppRef = collection(db, "taxApp");
 
 // Receipt document object state
 const receiptRef = collection(db, "receipt");
+
+const certificateRef = collection(db, "certificate");
 
 export const QphoneUserAuth = async (phoneNo) => {
 
@@ -114,6 +116,22 @@ export const getDocReceipt = async (email, taxAppId) => {
   return querySnapshot;
 }
 
+// Get Document from single certificate
+export const getDocSingleCertificate= async (email, taxAppId) => {
+  const q = query(certificateRef,where("email", "==", email), where ("taxAppId", "==", taxAppId));
+
+  const querySnapshot = await getDocs(q);
+  return querySnapshot;
+}
+
+// Get Document from certificate
+export const getDocCertificate = async () => {
+  const q = query(certificateRef, orderBy("timestamp", "desc"), limit(1));
+
+  const querySnapshot = await getDocs(q);
+  return querySnapshot;
+}
+
 // Add document to userAuth
 export const docUserAuth = async (uid, userObj) => {
   try {
@@ -148,6 +166,16 @@ export const docTaxApp = async (uid, taxAppObj) => {
 export const docTaxReceipt = async (receiptObj) => {
   try {
     await addDoc(collection(db, "receipt"), receiptObj)
+  } catch (e) {
+    console.log(e);
+  }
+}
+
+// Add Document to certificate
+export const docCertificate = async (certNo, certificateObj) => {
+  try {
+    const certificateDocRef = doc(certificateRef, certNo);
+    await setDoc(certificateDocRef, certificateObj);
   } catch (e) {
     console.log(e);
   }

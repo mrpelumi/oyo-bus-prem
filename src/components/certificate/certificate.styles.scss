@@ -1,0 +1,43 @@
+@use '../../variables' as v;
+
+@page{
+  size: A4;
+}
+
+.certificate-container{
+  background-image: url('../../assets/certificate-template.jpg');
+  background-position: left top;
+  background-repeat: no-repeat;
+  background-size: contain;
+  width: 52.5rem;
+  height: 37rem;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.certificate-header{
+  height: 13rem;
+}
+.certificate-busname{
+  height: 6rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  span{
+    font-size: 4rem;
+    font-weight: 600;
+  }
+}
+.certificate-number{
+  height: 15rem;
+  display: flex;
+  align-items: flex-end;
+  padding-left: 13rem;
+  padding-bottom: 1.2rem;
+  span{
+    font-size: 1.5rem;
+  }
+}

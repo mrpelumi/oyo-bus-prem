@@ -1,6 +1,6 @@
 import './successPage.styles.scss';
 import {Link, useParams} from 'react-router-dom';
-import { Alert } from 'react-st-modal';
+
 import { useEffect, useRef, useState } from 'react';
 import {useReactToPrint} from "react-to-print";
 import { Buffer } from 'buffer';
@@ -9,13 +9,16 @@ import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import { faSquareCheck } from '@fortawesome/free-solid-svg-icons';
 import { faCertificate } from '@fortawesome/free-solid-svg-icons';
 import ReceiptOriginal from '../../components/receiptOriginal/receiptOriginal.component';
-import { getDocReceipt } from '../../utils/firebase';
+import { getDocReceipt, getDocSingleCertificate } from '../../utils/firebase';
+import Certificate from '../../components/certificate/certificate.component';
 
 
 const SuccessPage = () => {
   const componentRef = useRef();
+  const certComponentRef = useRef();
   const {userEmail, taxAppId} = useParams();
   const [receiptValues, setReceiptValues] = useState({});
+  const [certValues, setCertValues] = useState({});
 
   // Create a buffer from the string
   useEffect(() => {
@@ -27,7 +30,7 @@ const SuccessPage = () => {
     const decodedUserEmail = userEmailObj.toString("utf8");
     const decodedTaxAppId = taxAppIdObj.toString("utf8");
 
-
+    // get docs value
     const getDocReceiptHandler = async() => {
       const response =  await getDocReceipt(decodedUserEmail, decodedTaxAppId);
       response.docs.forEach(item => {
@@ -35,7 +38,16 @@ const SuccessPage = () => {
     });
     }
 
+    // get certificate value
+    const getDocCertificateHandler = async () => {
+      const certResponse = await getDocSingleCertificate(decodedUserEmail, decodedTaxAppId);
+      certResponse.docs.forEach(item => {
+        setCertValues(item.data())
+      })
+    }
+
     getDocReceiptHandler();
+    getDocCertificateHandler();
   }, [])
   
 
@@ -43,14 +55,11 @@ const SuccessPage = () => {
   const onPrintHandler = useReactToPrint({
     content: () => componentRef.current
   })
-  const onCertificateHandler = () => {
-    try{
-      Alert("Kindly, visit our center for certificate", "Certificate")
-    } catch (e) {
-      console.log(e)
-    }
-    
-  }
+  const onCertificateHandler = useReactToPrint({
+    content: () => certComponentRef.current
+  })
+
+
   return (
     <div className='success-main-container'>
       <div className='success-header'>
@@ -62,6 +71,9 @@ const SuccessPage = () => {
       </div>
       <div className='receipt-component'>
         <ReceiptOriginal ref={componentRef} receiptValues={receiptValues} />
+      </div>
+      <div className='receipt-component'>
+        <Certificate ref={certComponentRef} certValues={certValues} />
       </div>
       
       <div className='certificate-text'>

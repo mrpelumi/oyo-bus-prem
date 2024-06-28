@@ -13,7 +13,7 @@ import emailjs from "@emailjs/browser";
 import { selectReceipt } from '../../store/receipt/receipt.selector';
 import { setAppStatus } from '../../store/appStatus/appStatus.reducer';
 
-import { docTaxReceipt, updateTaxApp } from '../../utils/firebase';
+import { docCertificate, docTaxReceipt, getDocCertificate, updateTaxApp } from '../../utils/firebase';
 import { Alert } from 'react-st-modal';
 import { Buffer } from 'buffer';
 
@@ -25,6 +25,7 @@ const PayUploadPage = () => {
   const receiptObj = useSelector(selectReceipt);
   const {busName, email} = receiptObj;
   const arrearsObjUrl = useRef();
+  const certificateNum = useRef();
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   
@@ -52,6 +53,7 @@ const PayUploadPage = () => {
 
   const ReceiptSubmitHandler = async (data) => {
     setIsSubmitting(true);
+    const currentTimeStamp = new Date();
     const currentPath = location.pathname;
      // Upload file to s3 bucket on aws
      const {fileReceipt} = data;
@@ -64,6 +66,13 @@ const PayUploadPage = () => {
 
     const paymentObjUrl = `${base_url}/businessreceipt.cloud/${urlBusName}/${fileObjName}`
     
+    const responseCert = await getDocCertificate();
+    responseCert.docs.forEach(item => {
+      const {certificateNo} = item.data();
+      const onlyCertNoStr = certificateNo.match(/(\d+)/);
+      const onlyCertNo = Number(onlyCertNoStr[0]) + 1;
+      certificateNum.current = `BP${onlyCertNo}`;
+    })
 
     // bypass for admin
     if (email === "buvencommunicationsltd@gmail.com"){
@@ -76,9 +85,12 @@ const PayUploadPage = () => {
       const base64TaxApp = taxAppIdEncode.toString("base64");
 
       docTaxReceipt({...receiptObj, paymentStatus: true, taxAppId: currentTaxId});
+      
+      // Document Certificate
+      docCertificate(certificateNum.current,{email, taxAppId:currentTaxId, busName, timestamp:currentTimeStamp, certificateNo: certificateNum.current})
       await updateTaxApp(currentTaxId, {paymentStatus: true});
       dispatch(setAppStatus("completed"));
-      navigate(`/app/success/${base64Email}/${base64TaxApp}`)
+      navigate(`/app/success/${base64Email}/${base64TaxApp}`);
     } else{
       // send an email with file links
       const templateParams = {

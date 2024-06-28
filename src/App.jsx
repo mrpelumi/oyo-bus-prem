@@ -19,6 +19,7 @@ import PayUploadPage from './routes/payUpload/payUpload.component';
 import ApprovalPage from './routes/approvalPage/approvalPage.component';
 import ReceiptOriginal from './components/receiptOriginal/receiptOriginal.component';
 import TaxAppHistory from './routes/taxAppHistory/taxAppHistory.component';
+import Certificate from './components/certificate/certificate.component';
 
 function App() {
 
@@ -52,7 +53,6 @@ function App() {
         <Route path='/app/payUploadPage' element={<PayUploadPage />} />
       </Route>
       <Route path='/app/success/:userEmail/:taxAppId' element={<SuccessPage />} />
-      <Route path='/receipt' element={<ReceiptOriginal />} />
     </Routes>
   )
 }
