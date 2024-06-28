@@ -16,6 +16,8 @@ import { setAppStatus } from '../../store/appStatus/appStatus.reducer';
 import { docCertificate, docTaxReceipt, getDocCertificate, updateTaxApp } from '../../utils/firebase';
 import { Alert } from 'react-st-modal';
 import { Buffer } from 'buffer';
+// Date time for firestore
+import { serverTimestamp } from 'firebase/firestore';
 
 const PayUploadPage = () => {
   const {register, handleSubmit, formState: {errors}} = useForm();
@@ -53,7 +55,7 @@ const PayUploadPage = () => {
 
   const ReceiptSubmitHandler = async (data) => {
     setIsSubmitting(true);
-    const currentTimeStamp = new Date();
+    // const currentTimeStamp = new getServerTimeStamp();
     const currentPath = location.pathname;
      // Upload file to s3 bucket on aws
      const {fileReceipt} = data;
@@ -87,7 +89,7 @@ const PayUploadPage = () => {
       docTaxReceipt({...receiptObj, paymentStatus: true, taxAppId: currentTaxId});
       
       // Document Certificate
-      docCertificate(certificateNum.current,{email, taxAppId:currentTaxId, busName, timestamp:currentTimeStamp, certificateNo: certificateNum.current})
+      docCertificate(certificateNum.current,{email, taxAppId:currentTaxId, busName, createdAt:serverTimestamp(), certificateNo: certificateNum.current})
       await updateTaxApp(currentTaxId, {paymentStatus: true});
       dispatch(setAppStatus("completed"));
       navigate(`/app/success/${base64Email}/${base64TaxApp}`);

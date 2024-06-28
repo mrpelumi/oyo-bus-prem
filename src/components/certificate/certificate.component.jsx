@@ -6,6 +6,15 @@ import { forwardRef } from 'react';
 const Certificate = forwardRef((props, ref) => {
   const certObj = props.certValues;
   const businessName = certObj.busName;
+  const timestampNo = certObj.createdAt;
+  const options = {
+    weekday: "long",
+    year: "numeric",
+    month: "short",
+    day: "numeric"
+  };
+  const certTime = timestampNo ? timestampNo.toDate().toLocaleDateString("en-US", options) : null;
+  
   return (
     <div className='certificate-container' ref={ref}>
       <div className='certificate-header'>
@@ -13,6 +22,9 @@ const Certificate = forwardRef((props, ref) => {
       </div>
       <div className='certificate-busname'>
         <span>{businessName ? businessName.substring(0,25):null}</span>
+      </div>
+      <div className='certificate-date'>
+        <span>Dated this: {certTime}</span>
       </div>
       <div className='certificate-number'>
         <span>{certObj.certificateNo}</span>

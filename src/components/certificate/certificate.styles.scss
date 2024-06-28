@@ -34,8 +34,18 @@
     font-weight: 600;
   }
 }
+.certificate-date{
+  height: 20rem;
+  display: flex;
+  flex-direction:row;
+  align-items: flex-end;
+  padding-left: 5.7rem;
+  span{ 
+    font-size: 2.5rem;
+  }
+}
 .certificate-number{
-  height: 30rem;
+  height: 10rem;
   display: flex;
   align-items: flex-end;
   padding-left: 27rem;
@@ -47,6 +57,6 @@
 
 @media print{
   @page {
-    size: landscape;
+    size: auto;
   }
 }

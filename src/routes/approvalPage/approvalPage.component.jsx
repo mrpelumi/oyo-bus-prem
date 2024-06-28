@@ -10,6 +10,7 @@ import { Buffer } from 'buffer';
 
 import { updateTaxApp, getDocReceipt, updateReceipt, getDocCertificate, docCertificate } from '../../utils/firebase';
 import { useRef, useState } from 'react';
+import { serverTimestamp } from 'firebase/firestore';
 
 const ApprovalPage = () => {
   const {register, handleSubmit, formState: {errors}} = useForm();
@@ -28,8 +29,7 @@ const ApprovalPage = () => {
     // Create buffer object, specifying utf8 as encoding
     setIsSubmittingYes(true);
     const approvalEmailObj = Buffer.from(data.approvalEmail, "utf8");
-    const taxAppIdObj = Buffer.from(data.taxAppId, "utf-8");
-    const currentTimeStamp = new Date(); 
+    const taxAppIdObj = Buffer.from(data.taxAppId, "utf-8"); 
 
     // Encode the Buffer as a base64 string
     const base64Email = approvalEmailObj.toString("base64");
@@ -66,7 +66,7 @@ const ApprovalPage = () => {
     await updateReceipt(receiptDocId.current, {paymentStatus: true});
     
     // Document Certificate 
-    docCertificate(certificateNum.current,{email:data.approvalEmail, taxAppId:data.taxAppId, busName:data.businessName, timestamp:currentTimeStamp, certificateNo: certificateNum.current});
+    docCertificate(certificateNum.current,{email:data.approvalEmail, taxAppId:data.taxAppId, busName:data.businessName, createdAt:serverTimestamp(), certificateNo: certificateNum.current});
 
     setTimeout(() => {
       setIsSubmittingYes(false);
