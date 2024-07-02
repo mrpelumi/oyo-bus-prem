@@ -134,6 +134,7 @@ const ProfileForm = () => {
       busName: "",
       homeAdd: "",
       nationality: "",
+      phoneNo: "",
     })
   }
 

@@ -43,7 +43,7 @@ const ProfileInput = ({register, errors, readOnlyVal=false, readOnlyExtra=false}
     optionInput: {...register("phoneNo", {
       required: "Phone Number is required",
       maxLength: 30,
-    }),minLength: 11, pattern: "[0-9]{11}", placeholder:"Enter your 11 nigeria digits", readOnly:true
+    }),minLength: 11, pattern: "[0-9]{11}", placeholder:"Enter your 11 nigeria digits",
   },
     errorName: "phoneNo"
   },
