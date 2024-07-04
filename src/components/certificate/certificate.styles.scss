@@ -27,10 +27,22 @@
   justify-content: flex-start;
   align-items: center;
   padding-left: 16rem;
-  span{
+  .cert-short{
     width: 70%;
     text-align: center;
     font-size: 6rem;
+    font-weight: 600;
+  }
+  .cert-long{
+    width: 80%;
+    text-align: left;
+    font-size: 4rem;
+    font-weight: 600;
+  }
+  .cert-extra-long{
+    width: 80%;
+    text-align: left;
+    font-size: 3rem;
     font-weight: 600;
   }
 }

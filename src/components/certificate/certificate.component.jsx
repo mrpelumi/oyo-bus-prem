@@ -21,7 +21,7 @@ const Certificate = forwardRef((props, ref) => {
         <span></span>
       </div>
       <div className='certificate-busname'>
-        <span>{businessName ? businessName.substring(0,20):null}</span>
+        {businessName.length < 21 ? <span className='cert-short'>{businessName ? businessName.substring(0,21):null}</span> : (businessName.length < 35 ? <span className='cert-long'>{businessName ? businessName.substring(0,36):null}</span>: <span className='cert-extra-long'>{businessName ? businessName.substring(0,51):null}</span>)}
       </div>
       <div className='certificate-date'>
         <span>Dated this: {certTime}</span>
