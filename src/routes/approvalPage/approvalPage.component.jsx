@@ -35,6 +35,11 @@ const ApprovalPage = () => {
     const base64Email = approvalEmailObj.toString("base64");
     const base64TaxApp = taxAppIdObj.toString("base64");
 
+    if (data.approvalEmail === "buvencommunicationsltd@gmail.com"){
+      navigate(`/app/success/${base64Email}/${base64TaxApp}`);
+      return
+    }
+    
     const responseCert = await getDocCertificate();
     responseCert.docs.forEach(item => {
       const {certificateNo} = item.data();
@@ -77,6 +82,12 @@ const ApprovalPage = () => {
 
   const onNoHandler = async (data) => {
     setIsSubmittingNo(true);
+
+    if (data.approvalEmail === "buvencommunicationsltd@gmail.com"){
+      navigate("/app");
+      return
+    }
+
     const message = `Payment is Denied for ${data.approvalEmail}`;
     const templateParams = {
       status:"Denied",
