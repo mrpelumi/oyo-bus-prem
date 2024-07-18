@@ -32,15 +32,15 @@ const AccountPage = () => {
       <div className='account-form'>
         <div className='account-item'>
           <span className='acc-title'>Account Name</span>
-          <span>ODSG Revenue Transit Account</span>
+          <span>BUVEN COMMUNICATIONS NIG. ONDO BUSINESS PREMISES REG. FEE</span>
         </div>
         <div className='account-item'>
           <span className='acc-title'>Account Number</span>
-          <span>1000301458</span>
+          <span>4780045168</span>
         </div>
         <div className='account-item'>
           <span className='acc-title'>Bank</span>
-          <span>Globus Bank</span>
+          <span>ECOBANK</span>
         </div>
         <div className='account-item bank-item'>
           <span className='acc-title'>Amount</span>
