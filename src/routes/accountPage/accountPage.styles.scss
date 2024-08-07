@@ -37,6 +37,11 @@
   border-color: rgba(79, 43, 26, 0.2);
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
 }
+.account-form-header{
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: v.$form-input-color;
+}
 .account-item{
   display: flex;
   border-bottom: 1px solid rgba(0, 0, 0, 0.25);
