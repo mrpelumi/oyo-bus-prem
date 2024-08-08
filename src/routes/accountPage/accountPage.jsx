@@ -29,7 +29,7 @@ const AccountPage = () => {
         <h3>Account Details</h3>
         <span>Kindly, make a bank transfer to the account below</span>
       </div>
-      <div className='account-form'>
+      {/* <div className='account-form'>
         <div>
           <span className='account-form-header'>ACCOUNT 1</span>
         </div>
@@ -49,10 +49,10 @@ const AccountPage = () => {
           <span className='acc-title'>Amount</span>
           <span>NGN {total}</span>
         </div>
-      </div>
+      </div> */}
       <div className='account-form'>
         <div>
-          <span className='account-form-header'>ACCOUNT 2</span>
+          <span className='account-form-header'>ACCOUNT 1</span>
         </div>
         <div className='account-item'>
           <span className='acc-title'>Account Name</span>
