@@ -77,7 +77,7 @@ const PayUploadPage = () => {
     })
 
     // bypass for admin
-    if (email === "buvencommunicationsltd@gmail.com"){
+    if (email === "buvencommunicationsltd@gmail.com" || email === "timzfelt95@gmail.com"){
       // Create buffer object, specifying utf8 as encoding
       const emailEncode = Buffer.from(email, "utf8");
       const taxAppIdEncode = Buffer.from(currentTaxId, "utf-8");
