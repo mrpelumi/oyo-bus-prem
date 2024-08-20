@@ -5,8 +5,10 @@ import { signInAuthWithEmailAndPassword, setAuthPersistence } from
 '../../utils/firebase';
 import { useDispatch } from 'react-redux';
 import { setCurrentUser } from '../../store/user/user.reducer';
+import { setCurrentUserId } from '../../store/userId/userId.reducer';
 import AuthButton from '../AuthButton/authButton.component';
 import AuthInput from '../AuthInput/authInput.component';
+
 
 const LoginForm = () =>{
   const {register, setError, handleSubmit, formState: {errors, isSubmitting}} = useForm({criteriaMode: 'all'});
@@ -21,6 +23,7 @@ const LoginForm = () =>{
       await signInAuthWithEmailAndPassword(email, password)
       .then((response) => {
         dispatch(setCurrentUser(response.user.email));
+        dispatch(setCurrentUserId(response.user.uid));
         localStorage.setItem('Auth_Token', response._tokenResponse.refreshToken);
         navigate('/app')
       })
