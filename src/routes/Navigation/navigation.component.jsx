@@ -71,7 +71,7 @@ const Navigation = () => {
             ((currentPath === '/app') || (currentPath === '/app/')) ? (
               <div className='nav-action-item'>
               <span><Link to={'/app/tax'} onClick={startAppHandler} className={'nav-action-link'}>Start Application</Link></span>
-              { currentUserEmail.current === "buvencommunicationsltd@gmail.com" && <span><Link to={'/app/admin/approval'} className={'nav-action-link'}>Admin Approval</Link></span>}
+              { (currentUserEmail.current === "buvencommunicationsltd@gmail.com" || currentUserEmail.current === "timzfelt95@gmail.com") && <span><Link to={'/app/admin/approval'} className={'nav-action-link'}>Admin Approval</Link></span>}
               <span><Link className={'nav-action-link'} onClick={SignOutHandler}>Log Out</Link></span>
             </div>) : (
               <div className='nav-action-item single-nav-link'>

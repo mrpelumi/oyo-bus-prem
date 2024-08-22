@@ -35,7 +35,7 @@ const ApprovalPage = () => {
     const base64Email = approvalEmailObj.toString("base64");
     const base64TaxApp = taxAppIdObj.toString("base64");
 
-    if (data.approvalEmail === "buvencommunicationsltd@gmail.com"){
+    if (data.approvalEmail === "buvencommunicationsltd@gmail.com" || data.approvalEmail === "timzfelt95@gmail.com"){
       navigate(`/app/success/${base64Email}/${base64TaxApp}`);
       return
     }
@@ -83,7 +83,7 @@ const ApprovalPage = () => {
   const onNoHandler = async (data) => {
     setIsSubmittingNo(true);
 
-    if (data.approvalEmail === "buvencommunicationsltd@gmail.com"){
+    if (data.approvalEmail === "buvencommunicationsltd@gmail.com" || data.approvalEmail === "timzfelt95@gmail.com"){
       navigate("/app");
       return
     }
