@@ -34,6 +34,7 @@ const customStyles = {
 const BusInput = ({register, errors, control, readOnlyVal, readOnlyExtra, watch}) => {
   const watchArrears = watch("arrears", "no");
   const watchBusCommence = watch("busCommence", "2023-01-01");
+  const watchBusType = watch("businessType", "");
   // main Business list
   const busSelector = useSelector(selectBusSector);
   const busSectorList = Object.values(busSelector);
@@ -52,6 +53,10 @@ const BusInput = ({register, errors, control, readOnlyVal, readOnlyExtra, watch}
   const busBranchInput = {...register("busBranch", {
       required: "Enter Number of Business Branch",
     }), min: 1, readOnly: readOnlyExtra}
+
+  const busOtherAmount = {...register("busOtherAmount", {
+      required: watchBusType.value === "Custom Business" ? "Enter Custom Amount" : false,
+    }), min: 1, errorname: "busOtherAmount"}
 
   const taxIdInput = {...register("taxId", {
     maxLength: 100
@@ -124,6 +129,18 @@ const BusInput = ({register, errors, control, readOnlyVal, readOnlyExtra, watch}
             {errors.businessType&& <div>
               {errors.businessType.message}  
             </div>}
+        </div>
+        
+        {watchBusType.value === "Custom Business" && 
+          <div className='input-container'>
+            <label htmlFor="">Enter Custom Amount</label>
+            <AuthInput options={busOtherAmount} type={"number"} />
+          </div>
+        }
+        <div className='error-container'>
+          {errors.busOtherAmount && <div>
+            {errors.busOtherAmount.message}  
+          </div>}
         </div>
 
         <div className='input-container'>

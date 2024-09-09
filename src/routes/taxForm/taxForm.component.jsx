@@ -109,7 +109,7 @@ const TaxForm = () => {
       return navigate('/app/tax/business')
     } else if(location.pathname === '/app/tax/business' || location.pathname === '/app/tax/business/'){
       setIsSubmitting(true);
-      const {busAdd, busName, busBranch, businessType, email, firstName, lastName,taxId, filePay, arrears, busCommence} = data;
+      const {busAdd, busName, busBranch, businessType, email, firstName, lastName,taxId, filePay, arrears, busCommence, busOtherAmount} = data;
       
       const taxuserProfile = {firstName, lastName, email};
       const taxBusiness = {busName, busBranch, busCommence, arrears, busAdd, businessType:businessType.value, taxId};
@@ -125,15 +125,22 @@ const TaxForm = () => {
         if (arrears === "no"){
           // Check if business type match
           if (!subNameList.includes(businessType.value)){
-           setError("businessType", {type: 'Mismatch of Business Types', message: "Mismatch of Business Types"}) 
+            setIsSubmitting(false);
+           setError("businessType", {type: 'Mismatch of Business Types', message: "Mismatch of Business Types"});
            return
           } 
+          
+          if (businessType.value === "Custom Business"){
+            taxFee.current = busOtherAmount;
+          } else{
+            taxFee.current = busTypeObj.map(item => item.annualFee);
+          }
 
           const receiptUuid =  uuidv4().substring(0,10);
           sessionStorage.setItem("receiptId", receiptUuid)
           const currentPaymentStatus = paymentStatus.current;
           
-          taxFee.current = busTypeObj.map(item => item.annualFee);
+          
           const certificateFee = taxFee.current * 0.2;
           const branchTotal = taxFee.current * Number(busBranch);
 
@@ -156,15 +163,21 @@ const TaxForm = () => {
           
         } else if (arrears === "yes"){
           if (!subNameList.includes(businessType.value)){
+            setIsSubmitting(false);
             setError("businessType", {type: 'Mismatch of Business Types', message: "Mismatch of Business Types"}) 
             return
            } 
+
+           if (businessType.value === "Custom Business"){
+            taxFee.current = busOtherAmount;
+          } else{
+            taxFee.current = busTypeObj.map(item => item.annualFee);
+          }
  
            const receiptUuid =  uuidv4().substring(0,10);
            sessionStorage.setItem("receiptId", receiptUuid)
            const currentPaymentStatus = paymentStatus.current;
            
-           taxFee.current = busTypeObj.map(item => item.annualFee);
            const certificateFee = taxFee.current * 0.2;
  
            const total = certificateFee;
@@ -220,8 +233,10 @@ const TaxForm = () => {
         return;
       }
     } else if(location.pathname === '/app/tax/business' || location.pathname === '/app/tax/business/'){
+      setIsSubmitting(false);
       return navigate('/app/tax')
     } else if(location.pathname === '/app/tax/receipt' || location.pathname === '/app/tax/receipt/'){
+      setIsSubmitting(false);
       return navigate('/app/tax/business')
   }
   }
