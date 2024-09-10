@@ -58,6 +58,10 @@ const BusInput = ({register, errors, control, readOnlyVal, readOnlyExtra, watch}
       required: watchBusType.value === "Custom Business" ? "Enter Custom Amount" : false,
     }), min: 1, errorname: "busOtherAmount"}
 
+  const certFeeInput = {...register("certFee", {
+      required: watchBusType.value === "Custom Business" ? "Enter Certificate Fee" : false,
+    }), min: 0, errorname: "certFeeInput"}
+
   const taxIdInput = {...register("taxId", {
     maxLength: 100
   }), minLength: 5, pattern: "[0-9]", placeholder: "Enter your TIN"}
@@ -131,15 +135,29 @@ const BusInput = ({register, errors, control, readOnlyVal, readOnlyExtra, watch}
             </div>}
         </div>
         
+        {/* Custom Amount */}
         {watchBusType.value === "Custom Business" && 
           <div className='input-container'>
-            <label htmlFor="">Enter Custom Amount</label>
+            <label htmlFor="">Custom Amount</label>
             <AuthInput options={busOtherAmount} type={"number"} />
           </div>
         }
         <div className='error-container'>
           {errors.busOtherAmount && <div>
             {errors.busOtherAmount.message}  
+          </div>}
+        </div>
+        
+        {/* Custom Certificate Fee */}
+        {watchBusType.value === "Custom Business" && 
+          <div className='input-container'>
+            <label htmlFor="">Certificate Fee</label>
+            <AuthInput options={certFeeInput} type={"number"} />
+          </div>
+        }
+        <div className='error-container'>
+          {errors.certFee && <div>
+            {errors.certFee.message}  
           </div>}
         </div>
 

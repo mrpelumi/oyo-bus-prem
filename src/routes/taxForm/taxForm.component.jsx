@@ -56,6 +56,7 @@ const TaxForm = () => {
   const dispatch = useDispatch();
   const taxAppDocId = useRef("");
   const taxFee = useRef();
+  const certificateFee = useRef();
   const formData = new FormData();
 
   const [currentYear, setCurrentYear] = useState(getYear());
@@ -109,7 +110,7 @@ const TaxForm = () => {
       return navigate('/app/tax/business')
     } else if(location.pathname === '/app/tax/business' || location.pathname === '/app/tax/business/'){
       setIsSubmitting(true);
-      const {busAdd, busName, busBranch, businessType, email, firstName, lastName,taxId, filePay, arrears, busCommence, busOtherAmount} = data;
+      const {busAdd, busName, busBranch, businessType, email, firstName, lastName,taxId, filePay, arrears, busCommence, busOtherAmount, certFee} = data;
       
       const taxuserProfile = {firstName, lastName, email};
       const taxBusiness = {busName, busBranch, busCommence, arrears, busAdd, businessType:businessType.value, taxId};
@@ -132,8 +133,10 @@ const TaxForm = () => {
           
           if (businessType.value === "Custom Business"){
             taxFee.current = busOtherAmount;
+            certificateFee.current = Number(certFee);
           } else{
             taxFee.current = busTypeObj.map(item => item.annualFee);
+            certificateFee.current = taxFee.current * 0.2;
           }
 
           const receiptUuid =  uuidv4().substring(0,10);
@@ -141,24 +144,23 @@ const TaxForm = () => {
           const currentPaymentStatus = paymentStatus.current;
           
           
-          const certificateFee = taxFee.current * 0.2;
           const branchTotal = taxFee.current * Number(busBranch);
 
-          const total = branchTotal + certificateFee;
+          const total = branchTotal + certificateFee.current;
           
           if (taxAppStatus === ""){
             const taxUuid = uuidv4().substring(0,10);
             sessionStorage.setItem("taxAppId", taxUuid);
             taxAppDocId.current = taxUuid;
-            await docTaxApp(taxUuid, {taxAppId: taxUuid,profile: taxuserProfile, business: taxBusiness, date:currentDate, paymentStatus:currentPaymentStatus, certificateFee, total, renewalFee:taxFee.current });
+            await docTaxApp(taxUuid, {taxAppId: taxUuid,profile: taxuserProfile, business: taxBusiness, date:currentDate, paymentStatus:currentPaymentStatus, certificateFee:certificateFee.current, total, renewalFee:taxFee.current });
             const updatedStatus = "processing";
             dispatch(setAppStatus(updatedStatus))
           } else if( taxAppStatus === "processing"){
             await updateTaxApp(taxAppDocId.current,{
-              business: taxBusiness, renewalFee:taxFee.current, certificateFee, total
+              business: taxBusiness, renewalFee:taxFee.current, certificateFee:certificateFee.current, total
             })
           }
-          const receiptObj = {arrears, busAdd, busName, busBranch, email, date:currentDate, fees:taxFee.current, transactionId:receiptUuid, certificateFee, total, paymentStatus:currentPaymentStatus};
+          const receiptObj = {arrears, busAdd, busName, busBranch, email, date:currentDate, fees:taxFee.current, transactionId:receiptUuid, certificateFee:certificateFee.current, total, paymentStatus:currentPaymentStatus};
           dispatch(setNewReceipt(receiptObj));
           
         } else if (arrears === "yes"){
@@ -170,30 +172,32 @@ const TaxForm = () => {
 
            if (businessType.value === "Custom Business"){
             taxFee.current = busOtherAmount;
+            certificateFee.current = Number(certFee);
           } else{
             taxFee.current = busTypeObj.map(item => item.annualFee);
+            certificateFee.current = taxFee.current * 0.2;
           }
  
            const receiptUuid =  uuidv4().substring(0,10);
            sessionStorage.setItem("receiptId", receiptUuid)
            const currentPaymentStatus = paymentStatus.current;
            
-           const certificateFee = taxFee.current * 0.2;
+           
  
-           const total = certificateFee;
+           const total = certificateFee.current;
            if (taxAppStatus === ""){
              const taxUuid = uuidv4().substring(0,10);
              sessionStorage.setItem("taxAppId", taxUuid);
              taxAppDocId.current = taxUuid;
-             await docTaxApp(taxUuid, {taxAppId: taxUuid,profile: taxuserProfile, business: taxBusiness, date:currentDate, paymentStatus:currentPaymentStatus, renewalFee: taxFee.current, certificateFee, total });
+             await docTaxApp(taxUuid, {taxAppId: taxUuid,profile: taxuserProfile, business: taxBusiness, date:currentDate, paymentStatus:currentPaymentStatus, renewalFee: taxFee.current, certificateFee:certificateFee.current, total });
              const updatedStatus = "processing";
              dispatch(setAppStatus(updatedStatus))
            } else if( taxAppStatus === "processing"){
              await updateTaxApp(taxAppDocId.current,{
-               business: taxBusiness, renewalFee: taxFee.current, certificateFee, total
+               business: taxBusiness, renewalFee: taxFee.current, certificateFee:certificateFee.current, total
              })
            }
-           const receiptObj = {arrears, busAdd, busName, busBranch, email, date:currentDate, fees:taxFee.current, transactionId:receiptUuid, certificateFee, total, paymentStatus:currentPaymentStatus};
+           const receiptObj = {arrears, busAdd, busName, busBranch, email, date:currentDate, fees:taxFee.current, transactionId:receiptUuid, certificateFee:certificateFee.current, total, paymentStatus:currentPaymentStatus};
            dispatch(setNewReceipt(receiptObj));
           
            const currentPath = location.pathname;
