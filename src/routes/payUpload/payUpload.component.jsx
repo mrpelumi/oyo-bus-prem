@@ -85,6 +85,8 @@ const PayUploadPage = () => {
       // Encode the Buffer as a base64 string
       const base64Email = emailEncode.toString("base64");
       const base64TaxApp = taxAppIdEncode.toString("base64");
+      
+      console.log(receiptObj)
 
       docTaxReceipt({...receiptObj, paymentStatus: true, taxAppId: currentTaxId});
       

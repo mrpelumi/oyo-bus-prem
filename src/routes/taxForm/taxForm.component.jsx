@@ -132,7 +132,7 @@ const TaxForm = () => {
           } 
           
           if (businessType.value === "Custom Business"){
-            taxFee.current = busOtherAmount;
+            taxFee.current = [Number(busOtherAmount)];
             certificateFee.current = Number(certFee);
           } else{
             taxFee.current = busTypeObj.map(item => item.annualFee);
@@ -142,7 +142,6 @@ const TaxForm = () => {
           const receiptUuid =  uuidv4().substring(0,10);
           sessionStorage.setItem("receiptId", receiptUuid)
           const currentPaymentStatus = paymentStatus.current;
-          
           
           const branchTotal = taxFee.current * Number(busBranch);
 
@@ -160,7 +159,7 @@ const TaxForm = () => {
               business: taxBusiness, renewalFee:taxFee.current, certificateFee:certificateFee.current, total
             })
           }
-          const receiptObj = {arrears, busAdd, busName, busBranch, email, date:currentDate, fees:taxFee.current, transactionId:receiptUuid, certificateFee:certificateFee.current, total, paymentStatus:currentPaymentStatus};
+          const receiptObj = {arrears, busAdd, busName, busBranch, email, date:currentDate, fees:taxFee.current, transactionId:receiptUuid, certificateFee:certificateFee.current, total:total, paymentStatus:currentPaymentStatus};
           dispatch(setNewReceipt(receiptObj));
           
         } else if (arrears === "yes"){
@@ -171,7 +170,7 @@ const TaxForm = () => {
            } 
 
            if (businessType.value === "Custom Business"){
-            taxFee.current = busOtherAmount;
+            taxFee.current = [Number(busOtherAmount)];
             certificateFee.current = Number(certFee);
           } else{
             taxFee.current = busTypeObj.map(item => item.annualFee);
@@ -197,7 +196,7 @@ const TaxForm = () => {
                business: taxBusiness, renewalFee: taxFee.current, certificateFee:certificateFee.current, total
              })
            }
-           const receiptObj = {arrears, busAdd, busName, busBranch, email, date:currentDate, fees:taxFee.current, transactionId:receiptUuid, certificateFee:certificateFee.current, total, paymentStatus:currentPaymentStatus};
+           const receiptObj = {arrears, busAdd, busName, busBranch, email, date:currentDate, fees:taxFee.current, transactionId:receiptUuid, certificateFee:certificateFee.current, total:total, paymentStatus:currentPaymentStatus};
            dispatch(setNewReceipt(receiptObj));
           
            const currentPath = location.pathname;
