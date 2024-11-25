@@ -26,6 +26,10 @@ import { getDocBusinessSector } from '../../utils/firebase';
 import { setBusSector } from '../../store/busSector/busSector.reducer';
 import { selectBusSectorName } from '../../store/busSectorSingle/busSectorSingle.selector';
 
+import {useFlutterwave, closePaymentModal} from 'flutterwave-react-v3';
+import oyoLogo from '../../assets/oyo-logo.png';
+import { Buffer } from 'buffer';
+
 
 const getYear = () => {
   const today = new Date();
@@ -66,6 +70,24 @@ const TaxForm = () => {
 
   const {register, watch, setError, formState: {errors}, setValue, handleSubmit,control} = useForm();
 
+  // flutterwave config
+  const config = {
+    public_key: import.meta.env.VITE_SECURE_FLUTTER_KEY,
+    tx_ref: receiptObj.transactionId,
+    amount: receiptObj.total,
+    currency: 'NGN',
+    payment_options: 'card',
+    customer: {},
+    customizations: {
+      title: 'Business Premises Payment',
+      description: 'Business Premises Payment',
+      logo: {oyoLogo},
+    },
+  }
+
+  // flutterwave function
+  const handleFlutterPayment = useFlutterwave(config);
+
   useEffect(() => {
     // Fill Tax Profile form
     const busDocHandler = async () => {
@@ -99,7 +121,6 @@ const TaxForm = () => {
     readOnlyExtra.current = true;
     readonlyVal.current = true;
   }, [])
-
 
   const onNextHandler =  async (data) => {
     if (location.pathname === '/app/tax' || location.pathname === '/app/tax/') {
@@ -217,15 +238,53 @@ const TaxForm = () => {
     }
   }
 
-  const onCheckoutHandler = async (data) => {
-    setIsSubmitting(true);
-    setTimeout(() => {
-      setIsSubmitting(false);
-    }, 1000)
-    return navigate('/app/accountPage')
-  }
+  // const onCheckoutHandler = async (data) => {
+  //   setIsSubmitting(true);
+  //   setTimeout(() => {
+  //     setIsSubmitting(false);
+  //   }, 1000)
+  //   return navigate('/app/accountPage')
+  // }
 
   // Deletes tax document ID
+  
+  const onCheckoutHandler = async (data) => {
+    const {email, phoneNo, firstName, lastName} = data;
+    const fullName = firstName + " " + lastName;
+    config.customer = {email, phone_number:phoneNo, name:fullName};
+    const qUserTaxApp = await getDocTaxApp(email);
+    qUserTaxApp.docs.forEach(item => {
+      taxAppDocId.current = item.id;
+    })
+    // Create buffer object, specifying utf8 as encoding
+    const emailEncode = Buffer.from(email, "utf8");
+    const taxAppIdEncode = Buffer.from(taxAppDocId.current, "utf-8");
+
+    // Encode the Buffer as a base64 string
+    const base64Email = emailEncode.toString("base64");
+    const base64TaxApp = taxAppIdEncode.toString("base64");
+    
+    try{
+      handleFlutterPayment({
+        callback: (response) => {  
+          if (response.status === "successful"){
+            dispatch(setNewReceipt({paymentStatus:true}))
+            dispatch(setAppStatus("completed"))
+            docTaxReceipt({...receiptObj, paymentStatus:true});
+            updateTaxApp(taxAppDocId.current, {paymentStatus:true, newPayee:false});
+            return navigate(`/app/success/${base64Email}/${base64TaxApp}`);
+          }
+          closePaymentModal();
+        }, 
+        onClose: () => {
+        } 
+      })
+    
+    } catch(e) {
+      console.log(e);
+    }
+  }
+  
   const onCancelHandler = async (data) => {
     if (location.pathname === '/app/tax' || location.pathname === '/app/tax/') {
       // Delete Tax App on platform

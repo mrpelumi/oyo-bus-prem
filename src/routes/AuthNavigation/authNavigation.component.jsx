@@ -1,6 +1,7 @@
 import { Outlet } from 'react-router-dom';
 import './authNavigation.styles.scss';
 import mainLogo from '../../assets/ondo-logo.png';
+import oyoLogo from '../../assets/oyo-logo.png';
 
 
 const AuthNavigation = () => {
@@ -9,11 +10,11 @@ const AuthNavigation = () => {
       <div className='nav-container'>
         <div className='nav-item-container'>
             <div className='nav-logo-container'>
-              <img src={mainLogo} alt="Ondo Logo" />
+              <img src={oyoLogo} alt="Oyo Logo" />
             </div>
             <span className='nav-span'></span>
             <div className='nav-brand-name'>
-              <span className='header'>ONDO STATE BUSINESS PREMISES</span>
+              <span className='header'>OYO STATE BUSINESS PREMISES</span>
               <span className='bottom'>REGISTRATION SYSTEM</span>
             </div>
           </div>

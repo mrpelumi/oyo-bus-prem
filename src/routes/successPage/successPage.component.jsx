@@ -12,6 +12,8 @@ import ReceiptOriginal from '../../components/receiptOriginal/receiptOriginal.co
 import { getDocReceipt, getDocSingleCertificate } from '../../utils/firebase';
 import Certificate from '../../components/certificate/certificate.component';
 
+import { Alert } from 'react-st-modal';
+
 
 const SuccessPage = () => {
   const componentRef = useRef();
@@ -51,14 +53,21 @@ const SuccessPage = () => {
   }, [])
   
 
+  // const onPrintHandler = useReactToPrint({
+  //   content: () => componentRef.current
+  // })
 
-  const onPrintHandler = useReactToPrint({
-    content: () => componentRef.current
-  })
-  const onCertificateHandler = useReactToPrint({
-    content: () => certComponentRef.current
-  })
+  // const onCertificateHandler = useReactToPrint({
+  //   content: () => certComponentRef.current
+  // })
 
+  const onPrintHandler = async () => {
+    await Alert("Receipt Feature coming soon", "Print Receipt")
+  }
+
+  const onCertificateHandler = async ()=> {
+    await Alert("Certificate Feature coming soon", "Print Certificate")
+  }
 
   return (
     <div className='success-main-container'>

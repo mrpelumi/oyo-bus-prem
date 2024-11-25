@@ -83,7 +83,6 @@ const SignupForm = () =>{
     if (result){
       setValue("terms", true);
     }
-    
   }
 
   return (

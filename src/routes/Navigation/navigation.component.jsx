@@ -1,7 +1,10 @@
 /* eslint-disable no-unused-vars */
 import './navigation.styles.scss';
 import { Link, Outlet } from 'react-router-dom';
-import mainLogo from '../../assets/ondo-logo.png';
+
+// import mainLogo from '../../assets/ondo-logo.png';
+import oyoLogo from '../../assets/oyo-logo.png';
+
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import { faCircleUser, faBars, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -57,11 +60,11 @@ const Navigation = () => {
       <div className='nav-container nav-app'>
         <div className='main-logo-container'>
           <div className='nav-logo-container'>
-            <img src={mainLogo} alt="Ondo Logo" />
+            <img src={oyoLogo} alt="Oyo Logo" />
           </div>
           <span className='nav-span'></span>
           <div className='nav-brand-name'>
-            <span className='header'>ONDO STATE BUSINESS PREMISES</span>
+            <span className='header'>OYO STATE BUSINESS PREMISES</span>
             <span className='bottom'>REGISTRATION SYSTEM</span>
           </div>
         </div>

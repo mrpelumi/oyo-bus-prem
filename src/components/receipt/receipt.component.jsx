@@ -2,7 +2,10 @@
 import './receipt.styles.scss';
 import { useSelector } from 'react-redux';
 import {selectReceipt} from '../../store/receipt/receipt.selector';
-import ondoLogo from '../../assets/ondo-logo.png';
+
+// import ondoLogo from '../../assets/ondo-logo.png';
+import oyoLogo from '../../assets/oyo-logo.png';
+
 import { forwardRef } from 'react';
 
 const Receipt = forwardRef((props, ref) => {
@@ -13,13 +16,13 @@ const Receipt = forwardRef((props, ref) => {
     <>
     <div className='receipt-container' ref={ref}>
       <div className='invoice-logo-container'>
-        <span><img src={ondoLogo} alt="invoice-logo" /></span>
+        <span><img src={oyoLogo} alt="invoice-logo" /></span>
       </div>
       <div className='invoice-header'>
         <span>E-Revenue Receipt</span>
       </div>
       <div className='invoice-subheader'>
-        <span>Ondo Business Premises</span>
+        <span>Oyo Business Premises</span>
         
       </div>
       <div className='invoice-date'>
